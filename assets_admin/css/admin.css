@@ -1,0 +1,164 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: "Roboto", "HelveticaNeue", "Helvetica Neue", sans-serif;
+}
+ul {
+    list-style: none;/*bo cham tron*/
+} 
+a {
+    text-decoration: none;/*bo gạch chân*/
+}
+nav {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    color: rgb(10, 10, 10);
+    box-shadow: 0 0 3px #969696;
+}
+nav strong{
+    width: 20%;
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(2, 2, 2);
+    display: flex;
+    background-color:rgb(253, 216, 5);
+    justify-content: center;
+    align-items: center;
+}
+.row{
+    display: flex;
+    justify-content: space-between;
+}
+.col-3{
+    flex: 11.1%;
+    height: 650px;
+    background-color: black;
+    color: white;
+}
+.col-3 ul li a{
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+.col-3 ul li{
+    width: 100%;
+    height: 60px;
+    padding-top: 25px;
+    text-align: center;
+}
+.col-3 ul li:hover {
+    height: 60px;
+    background: #969696;
+}
+.col-9{
+    flex: 9;
+   text-align: center;
+}
+.sanpham{
+    display: flex;
+    padding: 20px 20px;
+    justify-content: space-between
+}
+.sanpham a{
+    width: 150px;
+    height: 30px;
+    font-size: 14px;
+    font-family:'Times New Roman', Times, serif;
+    border-radius: 3px;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:rgb(253, 216, 5);
+}
+.sanpham a:hover{
+    background-color:rgb(248, 245, 57);
+}
+.anhsanpham {
+    width: 15%;
+}
+.anhsanpham img{
+    margin-top: 10px;
+    width:30%;
+    height:70px;
+}
+.anhtaikhoan {
+    width: 15%;
+}
+.anhtaikhoan img{
+    margin-top: 10px;
+    width:30%;
+    height:50px;
+    border-radius: 50%;
+}
+table{
+    width: 100%;
+}
+thead {
+    background-color: rgb(139, 134, 134);
+    color: white;
+}
+thead tr th{
+    padding: 5px;
+}
+
+/* ---------------------------------- */
+tbody{
+    width: 100%;
+}
+button{
+    background: white;
+    padding: 5px;
+}
+.khungadmin button{
+    width: auto;
+    height: 50px;
+    border: none;
+    display: flex;
+    align-items: center 
+}
+.sa-toolbar-user-thongtin{
+    padding-left: 10px;
+}
+.sa-toolbar-user-ten{
+    display: flex;
+}
+.sa-toolbar-user-email{
+    display: flex;
+}
+.khungadmin {
+    position: relative;
+    display: inline-block;
+}
+
+.dangxuat {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    list-style: none;
+    margin: 0;
+}
+
+.khungadmin:hover .dangxuat {
+    display: block;
+}
+.khungadmin-item {
+    text-decoration: none;
+    text-align: center;
+    width: 145px;
+    color: #000000;
+    display: block;
+    font-weight: bold;
+    transform: all 3s ease;
+}
+.khungadmin-item:hover{
+    color: rgb(241, 241, 241);
+    background: #000000;
+}
+/* ---------------THONG BAO----------- */

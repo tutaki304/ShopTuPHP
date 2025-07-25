@@ -1,0 +1,66 @@
+/* ------------------------------dang nhap-------------------- */
+.signup h2{
+    margin: 20px;
+    font-weight: bold;
+}
+.signup{
+    margin-top: 20px;
+    display: flex; /*cho khung dang nhap ra giua*/
+    justify-content: center;/*cho khung dang nhap ra giua*/
+    align-items: center;/*cho khung dang nhap ra giua*/
+    text-align: center;/*cho khung dang nhap ra giua*/
+    margin-bottom: 20px;
+}
+.signup form{
+    width: 400px;
+    height: 450px;
+    border-radius:5px;
+    box-shadow: 0 0 5px #7c7c7c;
+    text-align: center;
+    
+}
+.signup form label{
+    display: flex;
+    margin-top: 10px;
+    font-size: 18px;
+    margin-left: 35px;
+    font-weight: 400;
+    color: #7c7c7c;
+}
+.signup form input{
+    width: 85%;
+    height: 45px;
+    padding: 7px;
+    border: none;
+    margin-top: 10px;
+    border: 1px solid gray;
+    border-radius: 6px;
+    outline: none;
+}
+
+.signup form .submit{
+    color: white;
+    width: 85%;
+    height: 40px;
+    background-color: rgb(34, 53, 223);
+    border: none;
+    margin-top: 30px;
+}
+.signup form .submit:hover{
+    background-color: rgb(28, 42, 160);
+}
+.quenmk{
+    text-align: left;
+    padding-left: 30px;
+    margin-top:10px ;
+}
+.quenmk a{
+    color: blue;
+}
+.dktaiday{
+    margin-top: 15px;
+}
+.dktaiday a{
+    color: blue;
+    padding: 5px;
+}
