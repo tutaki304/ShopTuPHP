@@ -917,9 +917,33 @@
                 return;
             }
 
-            // Recalculate totals immediately
-            this.calculateTotal();
-            this.showNotification('Đã cập nhật số lượng', 'success');
+            // Send AJAX request to update quantity
+            const formData = new FormData();
+            formData.append('masp', productId);
+            formData.append('soluong', quantity);
+
+            fetch('?mod=product&act=updateQuantity', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update UI with new totals
+                    this.calculateTotal();
+                    this.showNotification('Đã cập nhật số lượng', 'success');
+                } else {
+                    this.showNotification(data.message || 'Có lỗi xảy ra', 'error');
+                    // Revert to previous value
+                    input.value = input.defaultValue;
+                }
+            })
+            .catch(error => {
+                console.error('Error updating quantity:', error);
+                this.showNotification('Có lỗi xảy ra khi cập nhật', 'error');
+                // Revert to previous value
+                input.value = input.defaultValue;
+            });
         }
 
         removeItem(productId) {

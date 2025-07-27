@@ -30,6 +30,488 @@ $recent_products = get_productNew(6);
 $viewed_products = get_productView(6);
 ?>
 
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - ShopTu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            outline: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .btn:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4338ca;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #4b5563;
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1280px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+        }
+        
+        .stat-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .bg-gradient-purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .bg-gradient-blue {
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+        }
+        
+        .bg-gradient-green {
+            background: linear-gradient(45deg, #10b981, #047857);
+        }
+        
+        .bg-gradient-purple-alt {
+            background: linear-gradient(45deg, #8b5cf6, #6d28d9);
+        }
+        
+        .bg-gradient-orange {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    
+    <!-- Main content -->
+    <div class="min-h-screen w-full">
+        
+        <!-- Page header -->
+        <div class="bg-gradient-purple px-8 pt-10 lg:pt-14 pb-16 flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-3xl font-bold text-white">Dashboard Admin</h1>
+                <p class="text-indigo-100 mt-2">Chào mừng <?= isset($_SESSION['user']['hoten']) ? $_SESSION['user']['hoten'] : 'Admin' ?> - Quản lý cửa hàng hiệu quả</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="index.php" class="btn btn-secondary bg-white/20 text-white hover:bg-white/30 border border-white/30">
+                    <i class="fas fa-home w-4 h-4 mr-2"></i>
+                    Trở về trang chủ
+                </a>
+                <a href="admin.php?mod=product&act=add" class="btn btn-primary bg-white text-indigo-600 hover:bg-gray-100">
+                    <i class="fas fa-plus w-4 h-4 mr-2"></i>
+                    Thêm sản phẩm mới
+                </a>
+            </div>
+        </div>
+        
+        <!-- Stats cards -->
+        <div class="-mt-12 mx-8 mb-8 stats-grid animate-fade-in-up">
+            <!-- Tổng sản phẩm -->
+            <div class="stat-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-gray-600 text-sm font-medium">Tổng sản phẩm</h4>
+                        <div class="mt-2">
+                            <h2 class="text-3xl font-bold text-gray-900">
+                                <?= $total_products ?>
+                            </h2>
+                            <p class="text-sm text-gray-500 mt-1">Sản phẩm đang hoạt động</p>
+                        </div>
+                    </div>
+                    <div class="stat-icon bg-gradient-blue">
+                        <i class="fas fa-box text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tổng người dùng -->
+            <div class="stat-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-gray-600 text-sm font-medium">Người dùng</h4>
+                        <div class="mt-2">
+                            <h2 class="text-3xl font-bold text-gray-900">
+                                <?= $total_accounts ?>
+                            </h2>
+                            <p class="text-sm text-gray-500 mt-1">Tài khoản đã đăng ký</p>
+                        </div>
+                    </div>
+                    <div class="stat-icon bg-gradient-green">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Danh mục -->
+            <div class="stat-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-gray-600 text-sm font-medium">Danh mục</h4>
+                        <div class="mt-2">
+                            <h2 class="text-3xl font-bold text-gray-900">
+                                <?= $total_categories ?>
+                            </h2>
+                            <p class="text-sm text-gray-500 mt-1">Phân loại sản phẩm</p>
+                        </div>
+                    </div>
+                    <div class="stat-icon bg-gradient-purple-alt">
+                        <i class="fas fa-tags text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hiệu suất -->
+            <div class="stat-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-gray-600 text-sm font-medium">Hiệu suất</h4>
+                        <div class="mt-2">
+                            <h2 class="text-3xl font-bold text-gray-900">
+                                98%
+                            </h2>
+                            <p class="text-sm text-green-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                +5% từ tháng trước
+                            </p>
+                        </div>
+                    </div>
+                    <div class="stat-icon bg-gradient-orange">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content grid -->
+        <div class="mx-8 grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+            <!-- Recent products table -->
+            <div class="xl:col-span-2">
+                <div class="card h-full">
+                    <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                        <h4 class="text-lg font-semibold text-gray-900">Sản phẩm gần đây</h4>
+                        <a href="admin.php?mod=product&act=admin" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                            Xem tất cả <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sản phẩm</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Danh mục</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Giá</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <?php if(!empty($recent_products)): ?>
+                                    <?php foreach($recent_products as $product): ?>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <img src="upload/product/<?= $product['anh'] ?>" alt="" class="w-12 h-12 rounded-lg object-cover">
+                                                <div class="ml-4">
+                                                    <div class="text-sm font-medium text-gray-900"><?= $product['tensp'] ?></div>
+                                                    <div class="text-sm text-gray-500">ID: <?= $product['masp'] ?></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <?= $product['tendm'] ?? 'N/A' ?>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <?= number_format($product['khuyenmai']) ?>đ
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                Hoạt động
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                            <i class="fas fa-box-open text-4xl text-gray-300 mb-4 block"></i>
+                                            <p>Chưa có sản phẩm nào</p>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick actions and status -->
+            <div class="space-y-6">
+                <!-- System status -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Trạng thái hệ thống</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Server</span>
+                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    Hoạt động
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Database</span>
+                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                                    Kết nối
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Bộ nhớ</span>
+                                <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+                                    <div class="w-2 h-2 bg-yellow-400 rounded-full mr-2"></div>
+                                    <?= rand(65, 85) ?>% sử dụng
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick actions -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Thao tác nhanh</h4>
+                        <div class="space-y-3">
+                            <a href="admin.php?mod=product&act=add" class="w-full btn btn-primary justify-start">
+                                <i class="fas fa-plus w-4 h-4 mr-3"></i>
+                                Thêm sản phẩm
+                            </a>
+                            <a href="admin.php?mod=product&act=add_danhmuc" class="w-full btn btn-secondary justify-start">
+                                <i class="fas fa-tags w-4 h-4 mr-3"></i>
+                                Thêm danh mục
+                            </a>
+                            <a href="admin.php?mod=user&act=add_user" class="w-full btn btn-secondary justify-start">
+                                <i class="fas fa-user-plus w-4 h-4 mr-3"></i>
+                                Thêm người dùng
+                            </a>
+                            <a href="index.php" class="w-full btn btn-secondary justify-start">
+                                <i class="fas fa-home w-4 h-4 mr-3"></i>
+                                Trở về trang chủ
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Top products -->
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-4">Sản phẩm xem nhiều</h4>
+                        <div class="space-y-3">
+                            <?php if(!empty($viewed_products)): ?>
+                                <?php foreach(array_slice($viewed_products, 0, 4) as $product): ?>
+                                <div class="flex items-center space-x-3">
+                                    <img src="upload/product/<?= $product['anh'] ?>" alt="" class="w-10 h-10 rounded-lg object-cover">
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">
+                                            <?= $product['tensp'] ?>
+                                        </p>
+                                        <p class="text-sm text-gray-500">
+                                            <?= number_format($product['khuyenmai']) ?>đ
+                                        </p>
+                                    </div>
+                                    <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                        <?= $product['soluotxem'] ?> views
+                                    </span>
+                                </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p class="text-gray-500 text-sm text-center py-4">Chưa có dữ liệu</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom section -->
+        <div class="mx-8 mb-8">
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                    <div class="flex items-center mb-4 sm:mb-0">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-2xl text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-blue-900">Mẹo quản lý</h3>
+                            <p class="text-blue-700">Cập nhật thông tin sản phẩm thường xuyên để thu hút khách hàng. Theo dõi thống kê để đưa ra quyết định kinh doanh hiệu quả.</p>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <a href="admin.php?mod=product&act=admin" class="btn btn-primary">
+                            Quản lý ngay
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all cards
+        document.querySelectorAll('.card, .stat-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+        
+        // Show cards immediately on load
+        setTimeout(() => {
+            document.querySelectorAll('.card, .stat-card').forEach(card => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 100);
+        
+        // Counter animation for numbers
+        function animateNumber(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 20);
+        }
+        
+        // Start counter animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const numbers = document.querySelectorAll('.stat-card h2');
+            numbers.forEach(num => {
+                const target = parseInt(num.textContent);
+                if (!isNaN(target)) {
+                    num.textContent = '0';
+                    setTimeout(() => animateNumber(num, target), 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
 <style>
     .dashboard-admin {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -341,231 +823,4 @@ $viewed_products = get_productView(6);
     .stat-card:nth-child(2) { animation-delay: 0.2s; }
     .stat-card:nth-child(3) { animation-delay: 0.3s; }
     .stat-card:nth-child(4) { animation-delay: 0.4s; }
-</style>
-
-<div class="dashboard-admin">
-    <!-- Header -->
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">
-            <i class="fas fa-tachometer-alt"></i>
-            Dashboard Quản Trị
-        </h1>
-        <p class="dashboard-subtitle">Tổng quan hệ thống quản lý ShopTu</p>
-        <div class="welcome-user">
-            <i class="fas fa-user-shield"></i>
-            Chào mừng, <?= isset($_SESSION['user']['hoten']) ? $_SESSION['user']['hoten'] : 'Admin' ?>!
-        </div>
-    </div>
-
-    <!-- Statistics Cards -->
-    <div class="stats-grid">
-        <div class="stat-card products">
-            <div class="stat-icon">
-                <i class="fas fa-box"></i>
-            </div>
-            <div class="stat-number"><?= $total_products ?></div>
-            <div class="stat-label">Sản phẩm</div>
-        </div>
-
-        <div class="stat-card categories">
-            <div class="stat-icon">
-                <i class="fas fa-tags"></i>
-            </div>
-            <div class="stat-number"><?= $total_categories ?></div>
-            <div class="stat-label">Danh mục</div>
-        </div>
-
-        <div class="stat-card users">
-            <div class="stat-icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="stat-number"><?= $total_accounts ?></div>
-            <div class="stat-label">Tài khoản</div>
-        </div>
-
-        <div class="stat-card orders">
-            <div class="stat-icon">
-                <i class="fas fa-shopping-cart"></i>
-            </div>
-            <div class="stat-number">0</div>
-            <div class="stat-label">Đơn hàng</div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-        <h2 class="section-title">
-            <i class="fas fa-bolt"></i>
-            Thao tác nhanh
-        </h2>
-        <div class="actions-grid">
-            <a href="admin.php?mod=product&act=add" class="action-btn">
-                <i class="fas fa-plus"></i>
-                Thêm sản phẩm
-            </a>
-            <a href="admin.php?mod=product&act=add_danhmuc" class="action-btn">
-                <i class="fas fa-folder-plus"></i>
-                Thêm danh mục
-            </a>
-            <a href="admin.php?mod=user&act=add" class="action-btn">
-                <i class="fas fa-user-plus"></i>
-                Thêm tài khoản
-            </a>
-            <a href="admin.php?mod=product&act=admin" class="action-btn">
-                <i class="fas fa-list"></i>
-                Quản lý sản phẩm
-            </a>
-            <a href="admin.php?mod=product&act=admin_danhmuc" class="action-btn">
-                <i class="fas fa-sitemap"></i>
-                Quản lý danh mục
-            </a>
-            <a href="admin.php?mod=user&act=user" class="action-btn">
-                <i class="fas fa-users-cog"></i>
-                Quản lý tài khoản
-            </a>
-        </div>
-    </div>
-
-    <!-- Recent Content -->
-    <div class="content-grid">
-        <!-- Recent Products -->
-        <div class="content-section">
-            <h2 class="section-title">
-                <i class="fas fa-clock"></i>
-                Sản phẩm mới nhất
-            </h2>
-            <?php if (!empty($recent_products)): ?>
-                <?php foreach($recent_products as $product): ?>
-                    <div class="product-item">
-                        <img src="upload/product/<?= $product['anh'] ?>" alt="<?= $product['tensp'] ?>" class="product-image">
-                        <div class="product-info">
-                            <h4><?= substr($product['tensp'], 0, 30) ?><?= strlen($product['tensp']) > 30 ? '...' : '' ?></h4>
-                            <div class="product-price"><?= number_format($product['khuyenmai']) ?>đ</div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p style="text-align: center; color: #999; padding: 20px;">Chưa có sản phẩm nào</p>
-            <?php endif; ?>
-        </div>
-
-        <!-- Most Viewed Products -->
-        <div class="content-section">
-            <h2 class="section-title">
-                <i class="fas fa-fire"></i>
-                Sản phẩm xem nhiều
-            </h2>
-            <?php if (!empty($viewed_products)): ?>
-                <?php foreach($viewed_products as $product): ?>
-                    <div class="product-item">
-                        <img src="upload/product/<?= $product['anh'] ?>" alt="<?= $product['tensp'] ?>" class="product-image">
-                        <div class="product-info">
-                            <h4><?= substr($product['tensp'], 0, 30) ?><?= strlen($product['tensp']) > 30 ? '...' : '' ?></h4>
-                            <div class="product-price">
-                                <?= number_format($product['khuyenmai']) ?>đ 
-                                <small>(<?= $product['soluotxem'] ?> lượt xem)</small>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p style="text-align: center; color: #999; padding: 20px;">Chưa có dữ liệu xem</p>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <!-- System Status -->
-    <div class="system-status">
-        <h2 class="section-title">
-            <i class="fas fa-server"></i>
-            Trạng thái hệ thống
-        </h2>
-        <div class="status-item">
-            <span class="status-label">Kết nối Database</span>
-            <span class="status-value status-good">Hoạt động tốt</span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">Dung lượng upload</span>
-            <span class="status-value status-good">Bình thường</span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">Bảo mật</span>
-            <span class="status-value status-good">An toàn</span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">Phiên bản PHP</span>
-            <span class="status-value status-good"><?= phpversion() ?></span>
-        </div>
-        <div class="status-item">
-            <span class="status-label">Thời gian hoạt động</span>
-            <span class="status-value status-good"><?= date('d/m/Y H:i:s') ?></span>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Add interactive effects
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animate numbers
-        const numberElements = document.querySelectorAll('.stat-number');
-        numberElements.forEach(element => {
-            const finalNumber = parseInt(element.textContent);
-            if (!isNaN(finalNumber)) {
-                animateNumber(element, 0, finalNumber, 1000);
-            }
-        });
-        
-        // Add click effects to action buttons
-        const actionBtns = document.querySelectorAll('.action-btn');
-        actionBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // Create ripple effect
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-                ripple.classList.add('ripple');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.background = 'rgba(255, 255, 255, 0.3)';
-                ripple.style.transform = 'scale(0)';
-                ripple.style.animation = 'ripple-animation 0.6s linear';
-                ripple.style.pointerEvents = 'none';
-                
-                this.style.position = 'relative';
-                this.style.overflow = 'hidden';
-                this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-    });
-
-    function animateNumber(element, start, end, duration) {
-        const startTime = performance.now();
-        const animate = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const current = Math.floor(start + (end - start) * progress);
-            element.textContent = current;
-            
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            }
-        };
-        requestAnimationFrame(animate);
-    }
-</script>
-
-<style>
-    @keyframes ripple-animation {
-        to {
-            transform: scale(4);
-            opacity: 0;
-        }
-    }
 </style>

@@ -2,8 +2,12 @@
 //quản lý view và model liên quan: trang chủ,liên hệ, giới thiệu...
 //gọi dc: view, model
     include_once 'model/connect.php';
-    include_once 'view/template_head.php';
-    include_once 'view/template_header.php';
+    
+    // Chỉ load template cho trang user, không load cho dashboard admin
+    if (!isset($_GET['act']) || $_GET['act'] !== 'dashboard') {
+        include_once 'view/template_head.php';
+        include_once 'view/template_header.php';
+    }
 
     if ( $_GET['act'] ) {
         switch ($_GET['act']) {
@@ -63,5 +67,9 @@
                 break;
         }
     }
-    include_once 'view/template_footer.php';
+    
+    // Chỉ load footer cho trang user, không load cho dashboard admin
+    if (!isset($_GET['act']) || $_GET['act'] !== 'dashboard') {
+        include_once 'view/template_footer.php';
+    }
 ?>

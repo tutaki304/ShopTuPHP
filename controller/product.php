@@ -168,6 +168,46 @@ if ($_GET['act']) {
             }
             header('Location: ?mod=page&act=giohang');
             break;
+        case 'updateQuantity':
+            // AJAX endpoint để cập nhật số lượng sản phẩm
+            include_once 'model/cart.php';
+            
+            header('Content-Type: application/json');
+            
+            if (!isset($_SESSION['user'])) {
+                echo json_encode(['success' => false, 'message' => 'Chưa đăng nhập']);
+                exit;
+            }
+            
+            if (!isset($_POST['masp']) || !isset($_POST['soluong'])) {
+                echo json_encode(['success' => false, 'message' => 'Thiếu thông tin']);
+                exit;
+            }
+            
+            $makh = $_SESSION['user']['makh'];
+            $masp = (int)$_POST['masp'];
+            $soluong = (int)$_POST['soluong'];
+            
+            try {
+                $giohang = get_hasCart($makh);
+                if ($giohang) {
+                    get_updateCartQuantity($giohang['mahd'], $masp, $soluong);
+                    
+                    // Tính tổng tiền mới
+                    $newTotal = get_cartTotalPrice($makh);
+                    
+                    echo json_encode([
+                        'success' => true,
+                        'newTotal' => $newTotal,
+                        'formattedTotal' => number_format($newTotal)
+                    ]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Không tìm thấy giỏ hàng']);
+                }
+            } catch (Exception $e) {
+                echo json_encode(['success' => false, 'message' => 'Lỗi hệ thống']);
+            }
+            exit;
         case 'updateCart':
             include_once 'model/products.php';
             include_once 'model/cart.php';
