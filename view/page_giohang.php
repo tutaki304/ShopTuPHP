@@ -627,8 +627,8 @@
                                                class="quantity-input" 
                                                min="1" 
                                                max="99" 
-                                               value="<?=isset($item['soluong']) ? $item['soluong'] : 1?>"
-                                               data-price="<?=$item['khuyenmai']?>"
+                                               value="<?=isset($item['soluong']) ? (int)$item['soluong'] : 1?>"
+                                               data-price="<?=(float)$item['khuyenmai']?>"
                                                onchange="updateQuantity(this, <?=$item['masp']?>)"
                                                readonly>
                                         <button type="button" class="quantity-btn" onclick="changeQuantity(<?=$item['masp']?>, 1)">+</button>
@@ -793,9 +793,13 @@
         }
 
         init() {
-            this.calculateTotal();
-            this.attachEventListeners();
-            this.initializeSelects();
+            // Đợi DOM load hoàn toàn
+            setTimeout(() => {
+                this.calculateTotal();
+                this.attachEventListeners();
+                this.initializeSelects();
+                console.log('Shopping cart initialized');
+            }, 100);
         }
 
         attachEventListeners() {
@@ -872,21 +876,35 @@
 
         changeQuantity(productId, change) {
             const productRow = document.querySelector(`[data-product-id="${productId}"]`);
+            if (!productRow) {
+                console.error('Product row not found for ID:', productId);
+                return;
+            }
+            
             const quantityInput = productRow.querySelector('.quantity-input');
-            let currentQuantity = parseInt(quantityInput.value);
+            if (!quantityInput) {
+                console.error('Quantity input not found for product:', productId);
+                return;
+            }
+            
+            let currentQuantity = parseInt(quantityInput.value) || 1;
             let newQuantity = currentQuantity + change;
 
             if (newQuantity < 1) newQuantity = 1;
             if (newQuantity > 99) newQuantity = 99;
 
             quantityInput.value = newQuantity;
+            console.log('Changed quantity for product', productId, 'from', currentQuantity, 'to', newQuantity);
+            
             this.updateQuantity(quantityInput, productId);
         }
 
         updateQuantity(input, productId) {
             const row = input.closest('.product-item');
-            const price = parseFloat(input.dataset.price);
-            const quantity = parseInt(input.value);
+            const price = parseFloat(input.dataset.price) || 0;
+            const quantity = parseInt(input.value) || 1;
+            
+            console.log('Update quantity:', {productId, price, quantity});
             
             if (quantity < 1) {
                 input.value = 1;
@@ -899,16 +917,7 @@
                 return;
             }
 
-            // Update product display
-            const quantityDisplay = row.querySelector('.product-quantity');
-            const newQuantityText = quantityDisplay.innerHTML.replace(/Số lượng:\s*<div[^>]*>.*?<\/div>/, `Số lượng: 
-                <div class="quantity-controls">
-                    <button type="button" class="quantity-btn" onclick="window.cart.changeQuantity(${productId}, -1)">-</button>
-                    <input type="number" class="quantity-input" min="1" max="99" value="${quantity}" data-price="${price}" onchange="window.cart.updateQuantity(this, ${productId})" readonly>
-                    <button type="button" class="quantity-btn" onclick="window.cart.changeQuantity(${productId}, 1)">+</button>
-                </div>`);
-
-            // Recalculate totals
+            // Recalculate totals immediately
             this.calculateTotal();
             this.showNotification('Đã cập nhật số lượng', 'success');
         }
@@ -928,18 +937,27 @@
             const productItems = document.querySelectorAll('.product-item');
             let subtotal = 0;
 
+            console.log('Calculating total for', productItems.length, 'items');
+
             productItems.forEach(item => {
                 const quantityInput = item.querySelector('.quantity-input');
                 if (quantityInput) {
-                    const price = parseFloat(quantityInput.dataset.price);
-                    const quantity = parseInt(quantityInput.value);
-                    subtotal += price * quantity;
+                    const price = parseFloat(quantityInput.dataset.price) || 0;
+                    const quantity = parseInt(quantityInput.value) || 1;
+                    const itemTotal = price * quantity;
+                    
+                    console.log(`Item: Price=${price}, Quantity=${quantity}, Total=${itemTotal}`);
+                    subtotal += itemTotal;
                 }
             });
+
+            console.log('Subtotal:', subtotal);
 
             // Calculate shipping
             const shippingFee = subtotal >= this.freeShippingThreshold ? 0 : this.shippingFee;
             const total = subtotal + shippingFee;
+
+            console.log('Final total:', total, 'Shipping:', shippingFee);
 
             // Update displays
             this.updateShippingDisplay(shippingFee);
@@ -1226,6 +1244,24 @@
 
     // Initialize when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
+        // Debug: Check cart data
+        console.log('=== CART DEBUG INFO ===');
+        const productItems = document.querySelectorAll('.product-item');
+        console.log('Found', productItems.length, 'products in cart');
+        
+        productItems.forEach((item, index) => {
+            const quantityInput = item.querySelector('.quantity-input');
+            if (quantityInput) {
+                console.log(`Product ${index + 1}:`, {
+                    productId: item.dataset.productId,
+                    quantity: quantityInput.value,
+                    price: quantityInput.dataset.price,
+                    itemTotal: (parseFloat(quantityInput.dataset.price) || 0) * (parseInt(quantityInput.value) || 1)
+                });
+            }
+        });
+        console.log('=== END DEBUG ===');
+        
         window.cart = new AdvancedShoppingCart();
         
         // Form submission handler
