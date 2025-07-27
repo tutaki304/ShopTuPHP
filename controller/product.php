@@ -1,15 +1,51 @@
 <?php
 include_once 'model/connect.php';
-if($titl){
-
-}else{
-    
-}
-include_once 'view/template_head.php';
-include_once 'view/template_header.php';
 
 if ($_GET['act']) {
     switch ($_GET['act']) {
+        //thêm vào giỏ hàng - xử lý TRƯỚC template
+        case 'addToCart':
+            // Debug logging
+            error_log("AddToCart triggered - GET: " . print_r($_GET, true));
+            error_log("AddToCart triggered - POST: " . print_r($_POST, true));
+            error_log("AddToCart triggered - Referer: " . ($_SERVER['HTTP_REFERER'] ?? 'No referer'));
+            
+            include_once 'model/products.php';
+            include_once 'model/cart.php';
+            $masp = $_GET['id'];
+            $makh = null; // Khởi tạo $makh để tránh cảnh báo
+            if (isset($_SESSION['user']) && isset($_SESSION['user']['makh'])) {
+                $makh = $_SESSION['user']['makh'];
+            }
+            try {
+                if ($makh !== null) {
+                    //kiểm tra có giỏ hàng hay chưa
+                    $kq = get_hasCart($makh);
+                    if ($kq) {
+                        //đúng, có giỏ hàng, thêm sản phẩm vào
+                        get_addToCart($kq['mahd'], $masp);
+                    } else {
+                        //sai, chưa có giỏ hàng
+                        get_cartAdd($makh);
+                        $kq = get_hasCart($makh);
+                            get_addToCart($kq['mahd'], $masp);
+                    }
+                $_SESSION['thongbao'] = 'Sản phẩm đã được thêm vào giỏ hàng';
+                header('Location: ?mod=product&act=ctsanpham&id='. $masp);
+                exit();
+                } else {
+                    // Xử lý khi không có thông tin khách hàng
+                 $_SESSION['thongbao'] = 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng đăng nhập.';
+                header('Location: ?mod=product&act=ctsanpham&id='.$masp);
+                exit();
+            }
+            } catch (\Throwable $th) {
+                $_SESSION['loi'] = 'Sản phẩm đã có trong giỏ hàng';
+                header('Location: ?mod=product&act=ctsanpham&id='.$masp);
+                exit();
+            }
+            break;
+            
         //trang chi tiết sản phẩm
         case 'ctsanpham':
             include_once 'model/connect.php';
@@ -34,6 +70,8 @@ if ($_GET['act']) {
             $data['dsdm']= get_categories();
             $data['dssp']= get_products();
            
+            include_once 'view/template_head.php';
+            include_once 'view/template_header.php';
             include_once 'view/page_sanpham.php';
             include_once 'view/template_footer.php';
             break;
@@ -107,40 +145,6 @@ if ($_GET['act']) {
             include_once 'view/page_danhmuc_detail.php';
             include_once 'view/template_footer.php';
             break;       
-        case 'addToCart':
-            include_once 'model/products.php';
-            include_once 'model/cart.php';
-            $masp = $_GET['id'];
-            $makh = null; // Khởi tạo $makh để tránh cảnh báo
-            if (isset($_SESSION['user']) && isset($_SESSION['user']['makh'])) {
-                $makh = $_SESSION['user']['makh'];
-            }
-            try {
-                if ($makh !== null) {
-                    //kiểm tra có giỏ hàng hay chưa
-                    $kq = get_hasCart($makh);
-                    if ($kq) {
-                        //đúng, có giỏ hàng, thêm sản phẩm vào
-                        get_addToCart($kq['mahd'], $masp);
-                    } else {
-                        //sai, chưa có giỏ hàng
-                        get_cartAdd($makh);
-                        $kq = get_hasCart($makh);
-                            get_addToCart($kq['mahd'], $masp);
-                    }
-                $_SESSION['thongbao'] = 'Sản phẩm đã được thêm vào giỏ hàng';
-                header('Location: ?mod=product&act=ctsanpham&id='.$masp);
-                } else {
-                    // Xử lý khi không có thông tin khách hàng
-                 $_SESSION['thongbao'] = 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng đăng nhập.';
-                header('Location: ?mod=product&act=ctsanpham&id='.$masp);
-            }
-            } catch (\Throwable $th) {
-                $_SESSION['loi'] = 'Sản phẩm đã có trong giỏ hàng';
-                header('Location: ?mod=product&act=ctsanpham&id='.$masp);
-            }
-       
-            break;
             
         case 'removeFromCart':
             include_once 'model/products.php';
@@ -370,5 +374,11 @@ if ($_GET['act']) {
             # 404 - trang web không tồn tại!
             break;
     }
+} else {
+    // Nếu không có action, hiển thị trang mặc định
+    include_once 'view/template_head.php';
+    include_once 'view/template_header.php';
+    include_once 'view/template_footer.php';
 }
+?>
 ?>

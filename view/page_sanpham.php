@@ -51,10 +51,14 @@
                                 if ($count < 8): // Hiển thị chỉ khi số lượng sản phẩm chưa đạt 4
                             ?>             
                         <div class="danhmuc-right-content-item">
-                            <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>"><img src="upload/product/<?=$sp['anh']?>"><br></a>
-                            <p>Mã: <?=$sp['masp']?><span><?=$sp['khuyenmai']?>đ</span></p>
-                            <!-- <p><del><?=$sp['dongia']?>đ</del><span><?=$sp['khuyenmai']?>đ</span></p> -->
-                            <a href=""><h3><?=$sp['tensp']?></h3></a>
+                            <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>">
+                                <img src="upload/product/<?=$sp['anh']?>" alt="<?=$sp['tensp']?>">
+                                <h3><?=$sp['tensp']?></h3>
+                            </a>
+                            <p>
+                                <span>Mã: <?=$sp['masp']?></span>
+                                <span class="price"><?=number_format($sp['khuyenmai']??$sp['dongia'])?>đ</span>
+                            </p>
                         </div>
                         <?php
                             $count++; // Tăng biến đếm sau mỗi sản phẩm

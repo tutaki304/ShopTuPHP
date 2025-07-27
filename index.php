@@ -25,5 +25,4 @@
     }else{
         header("Location: ?mod=page&act=home");
     }
-   
-?> 
+?>

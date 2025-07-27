@@ -139,6 +139,125 @@
                delete_user($_GET['id']);
                header('Location: admin.php?mod=user&act=user');
             break;
+            
+            //đổi mật khẩu
+            case 'change_password':
+                if (!isset($_SESSION['user'])) {
+                    header('Location: ?mod=user&act=login');
+                    exit();
+                }
+                include_once 'model/user.php';
+                
+                if(isset($_POST['submit-change-password'])){
+                    $old_password = $_POST['old_password'];
+                    $new_password = $_POST['new_password'];
+                    $confirm_password = $_POST['confirm_password'];
+                    
+                    // Kiểm tra mật khẩu cũ
+                    $user = login($_SESSION['user']['email'], $old_password);
+                    if(!$user){
+                        $error = "Mật khẩu cũ không đúng!";
+                    } elseif($new_password !== $confirm_password) {
+                        $error = "Mật khẩu mới không khớp!";
+                    } elseif(strlen($new_password) < 6) {
+                        $error = "Mật khẩu mới phải có ít nhất 6 ký tự!";
+                    } else {
+                        // Cập nhật mật khẩu
+                        change_password($_SESSION['user']['makh'], $new_password);
+                        $success = "Đổi mật khẩu thành công!";
+                    }
+                }
+                
+                include_once 'view/template_head.php';
+                include_once 'view/template_header.php';
+                include_once 'view/page_change_password.php';
+                include_once 'view/template_footer.php';
+                break;
+                
+            //thông tin cá nhân
+            case 'profile':
+                if (!isset($_SESSION['user'])) {
+                    header('Location: ?mod=user&act=login');
+                    exit();
+                }
+                include_once 'model/user.php';
+                
+                // Lấy thông tin user hiện tại
+                $user = get_taikhoan($_SESSION['user']['makh']);
+                
+                if(isset($_POST['submit-profile'])){
+                    $ho = trim($_POST['ho']);
+                    $ten = trim($_POST['ten']);
+                    $hoten = $ho . ' ' . $ten; // Ghép họ và tên
+                    $email = trim($_POST['email']);
+                    $so_dien_thoai = trim($_POST['so_dien_thoai']);
+                    $dia_chi = trim($_POST['dia_chi']);
+                    
+                    // Kiểm tra email trùng
+                    if($email != $user['email']) {
+                        $check_email = user_checkEmail($email);
+                        if($check_email && $check_email['makh'] != $_SESSION['user']['makh']){
+                            $error = "Email đã được sử dụng!";
+                        }
+                    }
+                    
+                    // Kiểm tra số điện thoại trùng
+                    if($so_dien_thoai != $user['sdt']) {
+                        $check_phone = user_checkPhone($so_dien_thoai);
+                        if($check_phone && $check_phone['makh'] != $_SESSION['user']['makh']){
+                            $error = "Số điện thoại đã được sử dụng!";
+                        }
+                    }
+                    
+                    // Xử lý upload avatar
+                    $avatar = $user['anh']; // Giữ avatar cũ mặc định
+                    if(isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
+                        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                        $max_size = 2 * 1024 * 1024; // 2MB
+                        
+                        if(!in_array($_FILES['avatar']['type'], $allowed_types)) {
+                            $error = "Định dạng file không được hỗ trợ!";
+                        } elseif($_FILES['avatar']['size'] > $max_size) {
+                            $error = "File quá lớn! Tối đa 2MB.";
+                        } else {
+                            $upload_dir = "upload/avatar/";
+                            if(!file_exists($upload_dir)) {
+                                mkdir($upload_dir, 0755, true);
+                            }
+                            
+                            $file_extension = pathinfo($_FILES['avatar']['name'], PATHINFO_EXTENSION);
+                            $avatar = time() . "_" . $_SESSION['user']['makh'] . "." . $file_extension;
+                            $upload_path = $upload_dir . $avatar;
+                            
+                            if(!move_uploaded_file($_FILES['avatar']['tmp_name'], $upload_path)) {
+                                $error = "Lỗi khi upload file!";
+                                $avatar = $user['anh']; // Giữ avatar cũ
+                            }
+                        }
+                    }
+                    
+                    if(!isset($error)) {
+                        // Cập nhật thông tin
+                        update_profile($_SESSION['user']['makh'], $hoten, $email, $dia_chi, $so_dien_thoai, $avatar);
+                        
+                        // Cập nhật session
+                        $_SESSION['user']['hoten'] = $hoten;
+                        $_SESSION['user']['email'] = $email;
+                        $_SESSION['user']['sdt'] = $so_dien_thoai;
+                        $_SESSION['user']['diachi'] = $dia_chi;
+                        $_SESSION['user']['anh'] = $avatar;
+                        
+                        // Lấy lại thông tin user để hiển thị
+                        $user = get_taikhoan($_SESSION['user']['makh']);
+                        $success = "Cập nhật thông tin thành công!";
+                    }
+                }
+                
+                include_once 'view/template_head.php';
+                include_once 'view/template_header.php';
+                include_once 'view/page_profile.php';
+                include_once 'view/template_footer.php';
+                break;
             default:
                 # 404 - trang web không tồn tại!
                 break;

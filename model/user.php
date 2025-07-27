@@ -72,4 +72,25 @@
         $stmt->execute();
         return $stmt->fetch();
     }
+    
+    // check email đã tồn tại (phiên bản mới)
+    function user_checkEmail($email){
+        $sql = "SELECT * FROM taikhoan WHERE email=:email";
+        $conn = pdo_get_connection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+    
+    // đổi mật khẩu
+    function change_password($makh, $new_password){
+        pdo_execute("UPDATE taikhoan SET matkhau=? WHERE makh=?", $new_password, $makh);
+    }
+    
+    // cập nhật thông tin cá nhân
+    function update_profile($makh, $hoten, $email, $diachi, $sdt, $avatar){
+        pdo_execute("UPDATE taikhoan SET hoten=?, email=?, diachi=?, sdt=?, anh=? WHERE makh=?", 
+                   $hoten, $email, $diachi, $sdt, $avatar, $makh);
+    }
 ?>
