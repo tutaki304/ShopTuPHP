@@ -17,12 +17,18 @@
         $existing = pdo_query_one("SELECT * FROM chitiethoadon WHERE mahd=? AND masp=?", $mahd, $masp);
         
         if($existing) {
-            // Nếu đã có, cập nhật số lượng
-            $newQuantity = $existing['soluong'] + $soluong;
+            // Nếu đã có, chỉ cộng thêm 1 (không cộng thêm $soluong để tránh tăng quá nhiều)
+            $newQuantity = $existing['soluong'] + 1;
             pdo_execute("UPDATE chitiethoadon SET soluong=? WHERE mahd=? AND masp=?", $newQuantity, $mahd, $masp);
+            
+            // Log để debug
+            error_log("Updated cart: Product $masp quantity from {$existing['soluong']} to $newQuantity");
         } else {
-            // Nếu chưa có, thêm mới
-            pdo_execute("INSERT INTO chitiethoadon(`mahd`,`masp`,`soluong`) VALUES(?,?,?)", $mahd, $masp, $soluong);
+            // Nếu chưa có, thêm mới với số lượng = 1
+            pdo_execute("INSERT INTO chitiethoadon(`mahd`,`masp`,`soluong`) VALUES(?,?,?)", $mahd, $masp, 1);
+            
+            // Log để debug
+            error_log("Added new to cart: Product $masp with quantity 1");
         }
     }
     
@@ -38,10 +44,12 @@
 
     //hiển thị chi tiết giỏ hàng với số lượng
     function get_Cart($makh){
-        return pdo_query("SELECT hd.*, ct.soluong, sp.* FROM hoadon hd 
+        return pdo_query("SELECT hd.mahd, ct.soluong, sp.masp, sp.tensp, sp.anh, sp.dongia, sp.khuyenmai 
+                         FROM hoadon hd 
                          INNER JOIN chitiethoadon ct ON hd.mahd = ct.mahd 
                          INNER JOIN sanpham sp ON ct.masp = sp.masp 
-                         WHERE hd.makh=? AND hd.trangthai=?",$makh, 'gio-hang');
+                         WHERE hd.makh=? AND hd.trangthai=?
+                         GROUP BY ct.masp",$makh, 'gio-hang');
     }
     
     // lấy tổng số lượng sản phẩm trong giỏ hàng
@@ -74,5 +82,30 @@
     //update giỏ hàng
     function get_updateCart($mahd, $makh, $ngaydathang, $tongtien, $ghichu, $trangthai){
         pdo_execute("UPDATE hoadon SET makh=?, ngaydathang=?, tongtien=?, ghichu=?, trangthai=? WHERE mahd=?",$makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $mahd);
+    }
+    
+    // Dọn dẹp giỏ hàng duplicate (fix bug số lượng sai)
+    function clean_duplicate_cart_items($makh) {
+        // Lấy mahd của giỏ hàng
+        $cart = get_hasCart($makh);
+        if (!$cart) return;
+        
+        $mahd = $cart['mahd'];
+        
+        // Lấy tất cả items trùng lặp
+        $duplicates = pdo_query("SELECT masp, COUNT(*) as count, SUM(soluong) as total_qty 
+                                FROM chitiethoadon 
+                                WHERE mahd=? 
+                                GROUP BY masp 
+                                HAVING COUNT(*) > 1", $mahd);
+        
+        foreach($duplicates as $dup) {
+            // Xóa tất cả records cũ
+            pdo_execute("DELETE FROM chitiethoadon WHERE mahd=? AND masp=?", $mahd, $dup['masp']);
+            
+            // Thêm lại 1 record với tổng số lượng
+            pdo_execute("INSERT INTO chitiethoadon(mahd, masp, soluong) VALUES(?,?,?)", 
+                       $mahd, $dup['masp'], $dup['total_qty']);
+        }
     }
 ?>

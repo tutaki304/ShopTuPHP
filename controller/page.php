@@ -28,7 +28,7 @@
                 }
                 $giohang = get_hasCart($makh);
                 if( $giohang ){
-                    $ctgiohang = get_cart($makh);
+                    $ctgiohang = get_Cart($makh);
                 }else{
                     $ctgiohang = [];
                 }

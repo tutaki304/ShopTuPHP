@@ -174,8 +174,29 @@
                 include_once 'view/template_footer.php';
                 break;
                 
-            //thông tin cá nhân
+            //hiển thị thông tin cá nhân
             case 'profile':
+                if (!isset($_SESSION['user'])) {
+                    header('Location: ?mod=user&act=login');
+                    exit();
+                }
+                include_once 'model/user.php';
+                
+                // Lấy thông tin user hiện tại
+                $user = get_taikhoan($_SESSION['user']['makh']);
+                
+                // Lấy thống kê hoạt động
+                $order_count = get_user_order_count($_SESSION['user']['makh']);
+                $comment_count = get_user_comment_count($_SESSION['user']['makh']);
+                
+                include_once 'view/template_head.php';
+                include_once 'view/template_header.php';
+                include_once 'view/page_user_profile.php';
+                include_once 'view/template_footer.php';
+                break;
+                
+            //chỉnh sửa thông tin cá nhân
+            case 'edit_profile':
                 if (!isset($_SESSION['user'])) {
                     header('Location: ?mod=user&act=login');
                     exit();

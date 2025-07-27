@@ -163,11 +163,14 @@
                                 </a>
                                 <div class="dropdown-divider"></div>
                             <?php endif; ?>
+                            <a href="?mod=user&act=profile" class="dropdown-item">
+                                <i class="fas fa-user"></i> Thông tin cá nhân
+                            </a>
+                            <a href="?mod=user&act=edit_profile" class="dropdown-item">
+                                <i class="fas fa-user-edit"></i> Chỉnh sửa thông tin
+                            </a>
                             <a href="?mod=user&act=change_password" class="dropdown-item">
                                 <i class="fas fa-key"></i> Đổi mật khẩu
-                            </a>
-                            <a href="?mod=user&act=profile" class="dropdown-item">
-                                <i class="fas fa-user-edit"></i> Thông tin cá nhân
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="?mod=user&act=logout" class="dropdown-item logout">

@@ -93,4 +93,16 @@
         pdo_execute("UPDATE taikhoan SET hoten=?, email=?, diachi=?, sdt=?, anh=? WHERE makh=?", 
                    $hoten, $email, $diachi, $sdt, $avatar, $makh);
     }
+    
+    // lấy số lượng đơn hàng của user
+    function get_user_order_count($makh){
+        $result = pdo_query_one("SELECT COUNT(*) as count FROM hoadon WHERE makh=? AND trangthai != 'gio-hang'", $makh);
+        return $result['count'] ?? 0;
+    }
+    
+    // lấy số lượng bình luận của user
+    function get_user_comment_count($makh){
+        $result = pdo_query_one("SELECT COUNT(*) as count FROM binhluan WHERE makh=?", $makh);
+        return $result['count'] ?? 0;
+    }
 ?>

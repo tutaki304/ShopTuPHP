@@ -30,6 +30,10 @@ if ($_GET['act']) {
                         $kq = get_hasCart($makh);
                             get_addToCart($kq['mahd'], $masp);
                     }
+                    
+                    // Dọn dẹp duplicate items trong giỏ hàng (fix bug số lượng sai)
+                    clean_duplicate_cart_items($makh);
+                    
                 $_SESSION['thongbao'] = 'Sản phẩm đã được thêm vào giỏ hàng';
                 header('Location: ?mod=product&act=ctsanpham&id='. $masp);
                 exit();

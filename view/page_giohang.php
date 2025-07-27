@@ -63,7 +63,7 @@
         margin-top: 20px;
     }
 
-    /* Alert Success */
+    /* Thông báo thành công */
     .alert-success {
         background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
         color: white;
@@ -386,7 +386,7 @@
         cursor: pointer;
     }
 
-    /* Custom radio button styling */
+    /* Tùy chỉnh kiểu dáng nút radio */
     .radio-item input[type="radio"]:checked {
         background-color: #3498db;
         border-color: #3498db;
@@ -473,7 +473,7 @@
         cursor: pointer;
     }
 
-    /* Custom checkbox styling */
+    /* Tùy chỉnh kiểu dáng checkbox */
     .checkbox-item input[type="checkbox"]:checked {
         background-color: #3498db;
         border-color: #3498db;
@@ -553,7 +553,7 @@
         background-color: #2980b9;
     }
 
-    /* Responsive Design */
+    /* Thiết kế tương thích */
     @media (max-width: 768px) {
         .checkout-container {
             grid-template-columns: 1fr;
@@ -784,7 +784,7 @@
     </div>
 </main>
 <script>
-    // Enhanced Shopping Cart System
+    // Hệ thống giỏ hàng nâng cao
     class AdvancedShoppingCart {
         constructor() {
             this.shippingFee = 19000;
@@ -803,21 +803,21 @@
         }
 
         attachEventListeners() {
-            // Radio button handlers
+            // Xử lý sự kiện nút radio
             document.querySelectorAll('input[type="radio"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     this.handleRadioChange(e.target);
                 });
             });
 
-            // Form select handlers
+            // Xử lý sự kiện form select
             document.querySelectorAll('.form-select').forEach(select => {
                 select.addEventListener('change', (e) => {
                     this.handleSelectChange(e.target);
                 });
             });
 
-            // Form submission
+            // Xử lý gửi form
             const form = document.getElementById('checkout-form');
             if (form) {
                 form.addEventListener('submit', (e) => {
@@ -827,7 +827,7 @@
                 });
             }
 
-            // Input animations
+            // Hiệu ứng input
             document.querySelectorAll('.form-input').forEach(input => {
                 input.addEventListener('focus', (e) => {
                     e.target.style.transform = 'scale(1.02)';
@@ -840,14 +840,14 @@
         }
 
         handleRadioChange(radio) {
-            // Reset all radio items in the same group
+            // Reset tất cả radio items trong cùng nhóm
             document.querySelectorAll(`input[name="${radio.name}"]`).forEach(r => {
                 r.closest('.radio-item').classList.remove('selected');
             });
-            // Add selected class to chosen item
+            // Thêm class selected cho item được chọn
             radio.closest('.radio-item').classList.add('selected');
 
-            // Update payment method display
+            // Cập nhật hiển thị phương thức thanh toán
             if (radio.name === 'payment_method') {
                 this.updatePaymentMethod(radio.value);
             }
@@ -860,7 +860,7 @@
                 select.style.color = '#999';
             }
 
-            // Update shipping fee based on location
+            // Cập nhật phí vận chuyển dựa trên địa điểm
             if (select.name === 'tinh') {
                 this.updateShippingFee();
             }
@@ -917,7 +917,7 @@
                 return;
             }
 
-            // Send AJAX request to update quantity
+            // Gửi AJAX request để cập nhật số lượng
             const formData = new FormData();
             formData.append('masp', productId);
             formData.append('soluong', quantity);
@@ -929,19 +929,19 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update UI with new totals
+                    // Cập nhật UI với tổng tiền mới
                     this.calculateTotal();
                     this.showNotification('Đã cập nhật số lượng', 'success');
                 } else {
                     this.showNotification(data.message || 'Có lỗi xảy ra', 'error');
-                    // Revert to previous value
+                    // Khôi phục về giá trị trước đó
                     input.value = input.defaultValue;
                 }
             })
             .catch(error => {
                 console.error('Error updating quantity:', error);
                 this.showNotification('Có lỗi xảy ra khi cập nhật', 'error');
-                // Revert to previous value
+                // Khôi phục về giá trị trước đó
                 input.value = input.defaultValue;
             });
         }
@@ -977,7 +977,7 @@
 
             console.log('Subtotal:', subtotal);
 
-            // Calculate shipping
+            // Tính phí vận chuyển
             const shippingFee = subtotal >= this.freeShippingThreshold ? 0 : this.shippingFee;
             const total = subtotal + shippingFee;
 
@@ -1015,7 +1015,7 @@
         updateShippingFee() {
             const provinceSelect = document.querySelector('select[name="tinh"]');
             if (provinceSelect && provinceSelect.value) {
-                // Different shipping fees for different provinces
+                // Phí vận chuyển khác nhau cho các tỉnh khác nhau
                 const shippingRates = {
                     'hcm': 15000,
                     'hn': 15000,
@@ -1052,7 +1052,7 @@
             let isValid = true;
             const errors = [];
 
-            // Check required fields
+            // Kiểm tra các trường bắt buộc
             requiredFields.forEach(field => {
                 const element = document.querySelector(`[name="${field.name}"]`);
                 if (!element || !element.value.trim()) {
@@ -1075,14 +1075,14 @@
                 }
             }
 
-            // Check terms agreement
+            // Kiểm tra đồng ý điều khoản
             const termsCheckbox = document.getElementById('terms');
             if (!termsCheckbox || !termsCheckbox.checked) {
                 errors.push('Vui lòng đồng ý với điều kiện giao dịch');
                 isValid = false;
             }
 
-            // Show errors
+            // Hiển thị lỗi
             if (errors.length > 0) {
                 this.showNotification(errors.join('<br>'), 'error');
             }
@@ -1109,7 +1109,7 @@
         }
 
         showNotification(message, type = 'info') {
-            // Remove existing notifications
+            // Xóa thông báo hiện tại
             document.querySelectorAll('.notification').forEach(n => n.remove());
 
             const notification = document.createElement('div');
@@ -1136,7 +1136,7 @@
 
             document.body.appendChild(notification);
 
-            // Auto remove after 3 seconds
+            // Tự động xóa sau 3 giây
             setTimeout(() => {
                 notification.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
@@ -1178,7 +1178,7 @@
             orderBtn.textContent = 'ĐANG XỬ LÝ...';
             orderBtn.disabled = true;
 
-            // Simulate processing time
+            // Giả lập thời gian xử lý
             setTimeout(() => {
                 this.showNotification('Đơn hàng đã được đặt thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.', 'success');
                 orderBtn.textContent = originalText;
@@ -1187,7 +1187,7 @@
         }
     }
 
-    // Global functions
+    // Các hàm toàn cục
     function changeQuantity(productId, change) {
         window.cart.changeQuantity(productId, change);
     }
@@ -1212,7 +1212,7 @@
         window.cart.processOrder();
     }
 
-    // Add CSS animations
+    // Thêm hiệu ứng CSS
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideInRight {
@@ -1254,7 +1254,7 @@
             transform: translateY(-1px);
         }
 
-        /* Smooth icon transitions */
+        /* Hiệu ứng chuyển đổi mượt mà cho icon */
         .cod-icon, .momo-icon {
             transition: all 0.3s ease;
         }
@@ -1266,9 +1266,9 @@
     `;
     document.head.appendChild(style);
 
-    // Initialize when DOM is ready
+    // Khởi tạo khi DOM sẵn sàng
     document.addEventListener('DOMContentLoaded', function() {
-        // Debug: Check cart data
+        // Debug: Kiểm tra dữ liệu giỏ hàng
         console.log('=== CART DEBUG INFO ===');
         const productItems = document.querySelectorAll('.product-item');
         console.log('Found', productItems.length, 'products in cart');
@@ -1288,7 +1288,7 @@
         
         window.cart = new AdvancedShoppingCart();
         
-        // Form submission handler
+        // Xử lý gửi form
         const form = document.getElementById('checkout-form');
         if (form) {
             form.addEventListener('submit', function(e) {
