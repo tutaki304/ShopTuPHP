@@ -18,7 +18,7 @@
                 </div>
             <?php endif; unset($thongbao); ?>
             <div class="button input-box">
-                <input class="submit" type="submit" name="submit-login" value="Submit">
+                <input class="submit" type="submit" name="submit-login" value="Đăng Nhập">
             </div>
             <p class="dktaiday">Bạn chưa có tài khoản<a href="?mod=user&act=signup">đăng ký</a>tại đây!</p>
         </form>

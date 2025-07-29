@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2023 Fashion.shop | Nhóm 2
+            &copy; 2023 Fashion.shop | Nhóm 19
         </div>
     </footer>
 </body>
