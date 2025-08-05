@@ -9,6 +9,13 @@
 }
 body{
     align-items: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 ul {
     list-style: none;/*bo cham tron*/
@@ -439,7 +446,9 @@ form .form-content .sign-up-text{
 }
 .gioithieu {
     display: flex;
+    flex-direction: column;
     margin: 15px;
+    min-height: 60vh;
 }
 .gioithieu .row-1{
     width: 100%;
@@ -449,12 +458,15 @@ form .form-content .sign-up-text{
 .gioithieu .row-2{
     width: 100%;
     display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
 }
 .gioithieu .row-2 img{
-    width: 770px;
+    max-width: 770px;
     height: 400px;
     margin: 20px;
     border-radius: 5px;
+    object-fit: cover;
 }
 /* -----------------------------------DANH MUC------------------------------- */
 .row {
@@ -814,6 +826,8 @@ footer {
     background-color: #333;
     color: #fff;
     padding: 30px 0;
+    margin-top: auto;
+    width: 100%;
 }
 
 .footer-container {

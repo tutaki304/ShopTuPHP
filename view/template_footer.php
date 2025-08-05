@@ -22,9 +22,9 @@
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2023 Fashion.shop | Nhóm 19
+            &copy; 2025 Fashion.shop | Nhóm 19
         </div>
     </footer>
 </body>
 </html>
-<script src="/assets_user/js/danhmuc.js"></script>
+<script src="assets_user/js/danhmuc.js"></script>

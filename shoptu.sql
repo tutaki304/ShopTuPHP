@@ -40,7 +40,7 @@ CREATE TABLE `binhluan` (
 --
 
 INSERT INTO `binhluan` (`mabl`, `makh`, `masp`, `noidung`, `ngaygui`) VALUES
-(3, 2, 58, 'sản phẩm chất lượng', '2023-12-05 10:22:21');
+(3, 2, 58, 'sản phẩm chất lượng', '2025-12-05 10:22:21');
 
 -- --------------------------------------------------------
 
@@ -104,10 +104,10 @@ CREATE TABLE `hoadon` (
 --
 
 INSERT INTO `hoadon` (`mahd`, `makh`, `ngaydathang`, `tongtien`, `ghichu`, `trangthai`) VALUES
-(10, 2, '2023-12-04', 950, 'awfawfawf', 'chuan-bi-don-hang'),
-(11, 2, '2023-12-04', 400, 'ffas', 'chuan-bi-don-hang'),
-(12, 1, '2023-12-05', 0, 'text', 'gio-hang'),
-(13, 2, '2023-12-05', 0, 'text', 'gio-hang');
+(10, 2, '2025-12-04', 950, 'awfawfawf', 'chuan-bi-don-hang'),
+(11, 2, '2025-12-04', 400, 'ffas', 'chuan-bi-don-hang'),
+(12, 1, '2025-12-05', 0, 'text', 'gio-hang'),
+(13, 2, '2025-12-05', 0, 'text', 'gio-hang');
 
 -- --------------------------------------------------------
 
@@ -135,30 +135,30 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`masp`, `tensp`, `dongia`, `khuyenmai`, `soluong`, `ngaytao`, `anh`, `mota`, `soluotxem`, `hoatdong`, `madm`, `mabl`) VALUES
-(11, 'Áo thun nữ phom rộng màu kem', 555, 450, 60, '2023-11-23 10:40:45', 'anhnu8.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 2, 0, 2, 0),
-(12, 'Quần short caro nâu đen nữ lưng cao', 755, 550, 242, '2023-11-23 10:41:54', 'anhnu9.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 6, 0, 2, 0),
-(13, 'Quần short nữ màu đen lưng cao', 950, 750, 222, '2023-11-23 10:42:45', 'anhnu10.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 7, 0, 2, 0),
-(14, 'Đầm xòe đỏ cổ v xoắn ngực', 500, 200, 22, '2023-11-23 10:43:50', 'anhnu5.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 22, 0, 2, 0),
-(21, 'Đầm ôm công sở nền đen hoạ tiết hoa', 555, 222, 100, '2023-11-23 16:12:59', 'anhnu6.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 22, 0, 2, 0),
-(27, 'Áo sơ mi thun hoạ tiết hoa lavender nhún ngực', 900, 600, 70, '2023-11-23 16:44:34', 'anhnu7.webp', '', 11, 0, 2, 0),
-(32, 'Đầm xòe công sở cổ sơ mi họa tiết caro', 750, 550, 111, '2023-11-24 11:11:57', 'anhnu4.webp', '', 66, 0, 2, 0),
-(33, 'Đầm xòe tafta dự tiệc cổ V cách điệu', 600, 500, 222, '2023-11-25 21:45:50', 'anhnu2.webp', '', 0, 0, 2, 0),
-(34, 'Đầm xòe xếp ly tay hến cổ xoắn', 800, 600, 23, '2023-11-26 21:37:45', 'anhnu1.webp', 'chat luong', 0, 0, 2, 0),
-(43, 'Áo Khoác Không Nón Vải Denim', 750, 500, 100, '2023-11-30 15:10:11', 'anhnam1.jpg', '', 0, 0, 3, 0),
-(44, 'Áo Khoác Không Nón Vải Dù', 550, 500, 100, '2023-11-30 15:15:07', 'anhnam2.jpg', '', 0, 0, 3, 0),
-(45, 'Áo Khoác Không Nón Vải Denim', 900, 700, 100, '2023-11-30 15:16:19', 'anhnam3.jpg', '', 0, 0, 3, 0),
-(46, 'Áo Khoác Có Nón Vải Dù Mỏng Nhẹ', 760, 650, 100, '2023-11-30 15:17:20', 'anhnam4.jpg', '', 0, 0, 3, 0),
-(47, 'Áo Khoác Có Nón Vải Thun Giữ Ấm', 525, 500, 50, '2023-11-30 15:18:25', 'anhnam5.jpg', '', 0, 0, 3, 0),
-(48, 'Áo Khoác Có Nón Vải Dù Trượt Nước', 567, 240, 67, '2023-11-30 15:19:31', 'anhnam6.jpg', '', 0, 0, 3, 0),
-(49, 'Áo Khoác Không Nón Vải Thun Giữ Ấm ', 540, 450, 424, '2023-11-30 15:20:37', 'anhnam7.jpg', '', 0, 0, 3, 0),
-(50, 'Áo Khoác Không Nón Vải Dù Chống Nắng', 350, 300, 45, '2023-11-30 15:30:08', 'anhnam8.jpg', '', 0, 0, 3, 0),
-(52, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều Thấm H', 500, 400, 23, '2023-11-30 15:32:22', 'anhthunnam2.jpg', '', 0, 0, 1, 0),
-(53, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 4 Chiều Co Giã', 600, 550, 45, '2023-11-30 15:33:25', 'anhthunnam3.jpg', '', 0, 0, 1, 0),
-(54, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều', 700, 400, 36, '2023-11-30 15:34:12', 'anhthunnam4.jpg', '', 0, 0, 1, 0),
-(55, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 4 Chiều Co Giã', 650, 450, 23, '2023-11-30 15:34:56', 'anhthunnam5.jpg', '', 0, 0, 1, 0),
-(56, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 4 Chiều Co Giã', 450, 350, 47, '2023-11-30 15:35:52', 'anhthunnam6.jpg', '', 0, 0, 1, 0),
-(57, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều Thấm H', 789, 500, 23, '2023-11-30 15:37:17', 'anhthunnam7.jpg', '', 0, 0, 1, 0),
-(58, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều Thấm H', 457, 400, 232, '2023-11-30 15:38:02', 'anhthunnam8.jpg', '', 0, 0, 1, 0);
+(11, 'Áo thun nữ phom rộng màu kem', 555, 450, 60, '2025-11-23 10:40:45', 'anhnu8.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 2, 0, 2, 0),
+(12, 'Quần short caro nâu đen nữ lưng cao', 755, 550, 242, '2025-11-23 10:41:54', 'anhnu9.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 6, 0, 2, 0),
+(13, 'Quần short nữ màu đen lưng cao', 950, 750, 222, '2025-11-23 10:42:45', 'anhnu10.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 7, 0, 2, 0),
+(14, 'Đầm xòe đỏ cổ v xoắn ngực', 500, 200, 22, '2025-11-23 10:43:50', 'anhnu5.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 22, 0, 2, 0),
+(21, 'Đầm ôm công sở nền đen hoạ tiết hoa', 555, 222, 100, '2025-11-23 16:12:59', 'anhnu6.webp', 'Những cô nàng trẻ trung đang tìm váy đen dự tiệc cho đúng dresscode thì thiết kế này của Fashion là chân ái dành cho nàng. Thiết kế được may theo dáng chữ a ngắn trên gối tạo nên sự trẻ trung khi khéo léo khoe đôi chân. Điểm cộng cho mẫu đầm này thu hút hơn chính là thông số váy được NTK cắt, may một cách tỉ mỉ theo từng size ôm vừa vặn với từng cơ thể dù là size S hay XL đều có thể diện xinh. Gam màu đen của chất liệu nhung tưng lại giúp mẫu váy có chút cổ điển, cũng có chút hiện đại sang trọng khi kết hợp phần lưới kem đính ngọc trai nhỏ ở thân trên, đính thêm chiếc nơ nhỏ xinh điệu đà. Chỉ cần phối thêm chút phụ kiện lấp lánh, đôi giày cao gót, nàng sẽ chiếm trọn spotlight mỗi khi lên ảnh đấy.', 22, 0, 2, 0),
+(27, 'Áo sơ mi thun hoạ tiết hoa lavender nhún ngực', 900, 600, 70, '2025-11-23 16:44:34', 'anhnu7.webp', '', 11, 0, 2, 0),
+(32, 'Đầm xòe công sở cổ sơ mi họa tiết caro', 750, 550, 111, '2025-11-24 11:11:57', 'anhnu4.webp', '', 66, 0, 2, 0),
+(33, 'Đầm xòe tafta dự tiệc cổ V cách điệu', 600, 500, 222, '2025-11-25 21:45:50', 'anhnu2.webp', '', 0, 0, 2, 0),
+(34, 'Đầm xòe xếp ly tay hến cổ xoắn', 800, 600, 23, '2025-11-26 21:37:45', 'anhnu1.webp', 'chat luong', 0, 0, 2, 0),
+(43, 'Áo Khoác Không Nón Vải Denim', 750, 500, 100, '2025-11-30 15:10:11', 'anhnam1.jpg', '', 0, 0, 3, 0),
+(44, 'Áo Khoác Không Nón Vải Dù', 550, 500, 100, '2025-11-30 15:15:07', 'anhnam2.jpg', '', 0, 0, 3, 0),
+(45, 'Áo Khoác Không Nón Vải Denim', 900, 700, 100, '2025-11-30 15:16:19', 'anhnam3.jpg', '', 0, 0, 3, 0),
+(46, 'Áo Khoác Có Nón Vải Dù Mỏng Nhẹ', 760, 650, 100, '2025-11-30 15:17:20', 'anhnam4.jpg', '', 0, 0, 3, 0),
+(47, 'Áo Khoác Có Nón Vải Thun Giữ Ấm', 525, 500, 50, '2025-11-30 15:18:25', 'anhnam5.jpg', '', 0, 0, 3, 0),
+(48, 'Áo Khoác Có Nón Vải Dù Trượt Nước', 567, 240, 67, '2025-11-30 15:19:31', 'anhnam6.jpg', '', 0, 0, 3, 0),
+(49, 'Áo Khoác Không Nón Vải Thun Giữ Ấm ', 540, 450, 424, '2025-11-30 15:20:37', 'anhnam7.jpg', '', 0, 0, 3, 0),
+(50, 'Áo Khoác Không Nón Vải Dù Chống Nắng', 350, 300, 45, '2025-11-30 15:30:08', 'anhnam8.jpg', '', 0, 0, 3, 0),
+(52, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều Thấm H', 500, 400, 23, '2025-11-30 15:32:22', 'anhthunnam2.jpg', '', 0, 0, 1, 0),
+(53, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 4 Chiều Co Giã', 600, 550, 45, '2025-11-30 15:33:25', 'anhthunnam3.jpg', '', 0, 0, 1, 0),
+(54, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều', 700, 400, 36, '2025-11-30 15:34:12', 'anhthunnam4.jpg', '', 0, 0, 1, 0),
+(55, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 4 Chiều Co Giã', 650, 450, 23, '2025-11-30 15:34:56', 'anhthunnam5.jpg', '', 0, 0, 1, 0),
+(56, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 4 Chiều Co Giã', 450, 350, 47, '2025-11-30 15:35:52', 'anhthunnam6.jpg', '', 0, 0, 1, 0),
+(57, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều Thấm H', 789, 500, 23, '2025-11-30 15:37:17', 'anhthunnam7.jpg', '', 0, 0, 1, 0),
+(58, 'Áo Thun Cổ Tròn Tay Ngắn Vải Cotton 2 Chiều Thấm H', 457, 400, 232, '2025-11-30 15:38:02', 'anhthunnam8.jpg', '', 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 
