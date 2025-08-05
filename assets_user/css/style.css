@@ -477,34 +477,56 @@ form .form-content .sign-up-text{
     padding: 20px;
     margin: 20px;
 }
+
 .container-danhmuc{
     margin: 0;
+    width: 100%;
+    max-width: 1200px;
 }
+
 .danhmuc-top{
     width: 100%;
     height: 40px;
     margin-left: 20px;
     align-items: center;
+    display: flex;
 }
+
+.danhmuc-left{
+    width: 20%;
+    padding-right: 20px;
+    min-width: 200px;
+}
+
+.danhmuc-right{
+    width: 80%;
+    padding-left: 20px;
+    flex: 1;
+}
+
 .danhmuc-top .fa-solid{
     color: #aaa;
     font-size: 10px;
 }
+
 .danhmuc-top p{
     color: #aaa;
     font-family: var(--main-text-font);
     padding: 10px;
     font-size: 12px;
 }
+
 .danhmuc-top p a{
     font-family: var(--main-text-font);
     margin: 0px;
     font-size: 12px;
 }
+
 /* --------------------tim kiem--------------------- */
 .danhmuc-left form {
     display: flex;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .danhmuc-left input[type="text"] {
@@ -526,14 +548,6 @@ form .form-content .sign-up-text{
     cursor: pointer;
 }
 /* ---------------------------------------------- */
-.danhmuc-left{
-    width: 20%;
-    padding-right: 20px;
-}
-.danhmuc-right{
-    width: 80%;
-    padding-left: 20px;
-}
 .danhmuc-right-top-item .tendanhmuc{
     text-transform: uppercase;
 }
@@ -570,27 +584,53 @@ form .form-content .sign-up-text{
 .danhmuc-right-content{
     margin-top: 20px;
     justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
 }
+
 .danhmuc-right-content-item{
     width: calc(25% - 12px);
     padding: 12px 0;
-  
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.danhmuc-right-content-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
 .danhmuc-right-content-item a h3{
     font-size: 15px;
     font-weight: 400;
     color: #333333;
+    padding: 0 12px;
+    margin: 10px 0 5px 0;
 }
+
 .danhmuc-right-content-item img{
    width: 100%;
-   height: 350px;
+   height: 250px;
+   object-fit: cover;
+   border-radius: 8px 8px 0 0;
 }
+
 .danhmuc-right-content-item p{
     display: flex;
-    font-size: 15px;
-    padding-top: 5px;
+    font-size: 14px;
+    padding: 5px 12px;
     justify-content: space-between;
     color: #666666;
+    margin: 0;
+}
+
+.danhmuc-right-content-item .price {
+    color: #e74c3c;
+    font-weight: bold;
 }
 .danhmuc-right-bottom{
     width: 100%;
@@ -608,17 +648,20 @@ form .form-content .sign-up-text{
 }
 
 .danhmuc-left ul h4 {
-    background: #2c3e50;
+    background: #1a1cc4;
     color: white;
     padding: 15px;
     margin: 0 0 10px 0;
     font-size: 16px;
     text-align: center;
     border-radius: 5px;
+    width: auto;
+    height: auto;
 }
 
 .danhmuc-left ul li {
     margin-bottom: 5px;
+    height: auto;
 }
 
 .danhmuc-left ul li a {
@@ -629,6 +672,8 @@ form .form-content .sign-up-text{
     border: 1px solid #e9ecef;
     border-radius: 4px;
     transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 .danhmuc-left ul li a:hover {
@@ -641,21 +686,6 @@ form .form-content .sign-up-text{
     display: none; /* Ẩn hr vì đã có border */
 }
 
-.danhmuc-left ul h4{
-    width: auto;
-    height: 40px;
-    padding: 10px;
-    color: white;
-    text-align: center;
-    background-color:#1a1cc4;
-}
-.danhmuc-left ul li>a{
-    color: rgb(66, 62, 62);
-    padding-top: 10px;
-    font-size: 14px;
-    font-weight: 400;
-
-}
 .danhmuc-left ul li ul{
     border: none;
 }
@@ -664,6 +694,7 @@ form .form-content .sign-up-text{
   display: flex;
   padding: 5px;
 }
+
 .danhmuc-left-li.block ul {
     display: block;
 }
@@ -885,17 +916,27 @@ footer .fa {
 }
 
 @media screen and (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+    
     .danhmuc-left {
         width: 100%;
         margin-bottom: 20px;
+        padding-right: 0;
     }
     
     .danhmuc-right {
         width: 100%;
+        padding-left: 0;
+    }
+    
+    .danhmuc-right-content {
+        gap: 10px;
     }
     
     .danhmuc-right-content-item {
-        width: calc(50% - 12px);
+        width: calc(50% - 8px);
     }
     
     .danhmuc-right-top-item {
@@ -908,6 +949,10 @@ footer .fa {
         flex: 100%;
         margin-bottom: 15px;
     }
+    
+    .danhmuc-left input[type="text"] {
+        width: 60%;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -918,20 +963,23 @@ footer .fa {
     
     .danhmuc-right-content-item {
         width: 100%;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
     
     .danhmuc-right-content-item img {
-        height: 250px;
+        height: 200px;
+    }
+    
+    .danhmuc-top {
+        margin-left: 10px;
     }
     
     .danhmuc-left input[type="text"] {
-        width: 120px;
+        width: 65%;
     }
     
-    .danhmuc-right-bottom {
-        flex-direction: column;
-        text-align: center;
+    .danhmuc-left input[type="submit"] {
+        padding: 8px 12px;
     }
 }
 
