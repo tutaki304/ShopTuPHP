@@ -112,4 +112,27 @@
     //     return pdo_query("SELECT * FROM sanpham WHERE tensp LIKE '%$keyword%'");
     // }
 
+    // Lấy sản phẩm với pagination
+    function get_products_with_pagination($limit, $offset) {
+        global $conn;
+        $sql = "SELECT s.*, d.tendm FROM sanpham s INNER JOIN danhmuc d ON s.madm = d.madm ORDER BY s.masp DESC LIMIT :limit OFFSET :offset";
+        $conn = pdo_get_connection();
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    // Đếm tổng số sản phẩm
+    function count_total_products() {
+        global $conn;
+        $sql = "SELECT COUNT(*) as total FROM sanpham";
+        $conn = pdo_get_connection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['total'];
+    }
+
 ?>

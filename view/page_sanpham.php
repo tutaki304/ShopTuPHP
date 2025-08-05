@@ -41,14 +41,8 @@
                     </div>
                     <div class="danhmuc-right-content row">  
                         <?php 
-                            // Sắp xếp mảng sản phẩm theo thứ tự giảm dần của ngày thêm vào
-                            usort($data['dssp'], function($a, $b) {
-                                return strtotime($b['ngaytao']) - strtotime($a['ngaytao']);
-                            });
-
-                            $count = 0; // Biến đếm số sản phẩm
-                            foreach($data['dssp']as $sp):
-                                if ($count < 8): // Hiển thị chỉ khi số lượng sản phẩm chưa đạt 4
+                            // Hiển thị sản phẩm từ pagination
+                            foreach($data['dssp'] as $sp):
                             ?>             
                         <div class="danhmuc-right-content-item">
                             <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>">
@@ -61,17 +55,66 @@
                             </p>
                         </div>
                         <?php
-                            $count++; // Tăng biến đếm sau mỗi sản phẩm
-                            endif;
                             endforeach; 
                         ?>
                     </div>
                     <div class="danhmuc-right-bottom row">
                         <div class="danhmuc-right-bottom-item">
-                            <p>Hiển thị 2<span> | </span>4 sản phẩm</p>
+                            <p>Hiển thị <?= $data['pagination']['start_item'] ?><span> - </span><?= $data['pagination']['end_item'] ?> trong <?= $data['pagination']['total_products'] ?> sản phẩm</p>
                         </div>
                         <div class="danhmuc-right-bottom-item">
-                            <p><span>&#171;</span> 1 2 3 4 5 <span>&#187;</span> Trang cuối</p>
+                            <div class="pagination">
+                                <?php
+                                $current_page = $data['pagination']['current_page'];
+                                $total_pages = $data['pagination']['total_pages'];
+                                
+                                // Nút Previous
+                                if ($current_page > 1): ?>
+                                    <a href="?mod=product&act=sanpham&page=<?= $current_page - 1 ?>" class="pagination-btn">&#171;</a>
+                                <?php else: ?>
+                                    <span class="pagination-btn disabled">&#171;</span>
+                                <?php endif; ?>
+                                
+                                <?php
+                                // Hiển thị các trang
+                                $start_page = max(1, $current_page - 2);
+                                $end_page = min($total_pages, $current_page + 2);
+                                
+                                // Hiển thị trang đầu nếu cần
+                                if ($start_page > 1): ?>
+                                    <a href="?mod=product&act=sanpham&page=1" class="pagination-btn">1</a>
+                                    <?php if ($start_page > 2): ?>
+                                        <span class="pagination-btn disabled">...</span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                
+                                <?php
+                                // Hiển thị các trang gần trang hiện tại
+                                for ($i = $start_page; $i <= $end_page; $i++): ?>
+                                    <?php if ($i == $current_page): ?>
+                                        <span class="pagination-btn active"><?= $i ?></span>
+                                    <?php else: ?>
+                                        <a href="?mod=product&act=sanpham&page=<?= $i ?>" class="pagination-btn"><?= $i ?></a>
+                                    <?php endif; ?>
+                                <?php endfor; ?>
+                                
+                                <?php
+                                // Hiển thị trang cuối nếu cần
+                                if ($end_page < $total_pages): ?>
+                                    <?php if ($end_page < $total_pages - 1): ?>
+                                        <span class="pagination-btn disabled">...</span>
+                                    <?php endif; ?>
+                                    <a href="?mod=product&act=sanpham&page=<?= $total_pages ?>" class="pagination-btn"><?= $total_pages ?></a>
+                                <?php endif; ?>
+                                
+                                <?php
+                                // Nút Next
+                                if ($current_page < $total_pages): ?>
+                                    <a href="?mod=product&act=sanpham&page=<?= $current_page + 1 ?>" class="pagination-btn">&#187;</a>
+                                <?php else: ?>
+                                    <span class="pagination-btn disabled">&#187;</span>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>

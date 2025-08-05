@@ -66,13 +66,32 @@ if ($_GET['act']) {
             include_once 'view/page_ctsanpham.php';
             include_once 'view/template_footer.php';
             break;
-            //hiển thị sản phẩm
+        //hiển thị sản phẩm
         case 'sanpham':
             include_once 'model/connect.php';
             include_once 'model/categories.php';
             include_once 'model/products.php';
-            $data['dsdm']= get_categories();
-            $data['dssp']= get_products();
+            
+            // Pagination setup
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = 8; // Số sản phẩm mỗi trang
+            $offset = ($page - 1) * $limit;
+            
+            $data['dsdm'] = get_categories();
+            $total_products = count_total_products(); // Tổng số sản phẩm
+            $data['dssp'] = get_products_with_pagination($limit, $offset); // Lấy sản phẩm theo trang
+            
+            // Tính toán pagination
+            $total_pages = ceil($total_products / $limit);
+            $data['pagination'] = [
+                'current_page' => $page,
+                'total_pages' => $total_pages,
+                'total_products' => $total_products,
+                'limit' => $limit,
+                'offset' => $offset,
+                'start_item' => $offset + 1,
+                'end_item' => min($offset + $limit, $total_products)
+            ];
            
             include_once 'view/template_head.php';
             include_once 'view/template_header.php';
@@ -140,9 +159,33 @@ if ($_GET['act']) {
             include_once 'model/connect.php';
             include_once 'model/categories.php';   
             include_once 'model/products.php'; 
-            $data['dsdm']= get_categories();
-            $ctdanhmuc = get_categoriesID($_GET['id']);
-            $dssanpham = get_ByCategories($_GET['id']);
+            
+            // Pagination setup cho danh mục
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = 8; // Số sản phẩm mỗi trang
+            $offset = ($page - 1) * $limit;
+            $category_id = $_GET['id'];
+            
+            $data['dsdm'] = get_categories();
+            $ctdanhmuc = get_categoriesID($category_id);
+            
+            // Lấy sản phẩm theo danh mục với pagination
+            $all_products = get_ByCategories($category_id);
+            $total_products = count($all_products);
+            $dssanpham = array_slice($all_products, $offset, $limit);
+            
+            // Tính toán pagination
+            $total_pages = ceil($total_products / $limit);
+            $data['pagination'] = [
+                'current_page' => $page,
+                'total_pages' => $total_pages,
+                'total_products' => $total_products,
+                'limit' => $limit,
+                'offset' => $offset,
+                'start_item' => $offset + 1,
+                'end_item' => min($offset + $limit, $total_products),
+                'category_id' => $category_id
+            ];
 
             include_once 'view/template_head.php';
             include_once 'view/template_header.php';

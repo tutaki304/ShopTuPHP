@@ -583,20 +583,21 @@ form .form-content .sign-up-text{
 }
 .danhmuc-right-content{
     margin-top: 20px;
-    justify-content: space-between;
+    justify-content: flex-start; /* Đổi từ space-between thành flex-start để dồn về trái */
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
 }
 
 .danhmuc-right-content-item{
-    width: calc(25% - 12px);
+    width: calc(25% - 12px); /* Giữ nguyên để đảm bảo 4 cột */
     padding: 12px 0;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     transition: all 0.3s ease;
     background: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    flex-shrink: 0; /* Ngăn các item bị co lại */
 }
 
 .danhmuc-right-content-item:hover {
@@ -636,6 +637,54 @@ form .form-content .sign-up-text{
     width: 100%;
     justify-content: space-between;
     margin: 30px 0 20px;
+    align-items: center;
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pagination-btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.pagination-btn:hover {
+    background-color: #1a1cc4;
+    color: white;
+    border-color: #1a1cc4;
+}
+
+.pagination-btn.active {
+    background-color: #1a1cc4;
+    color: white;
+    border-color: #1a1cc4;
+    font-weight: bold;
+}
+
+.pagination-btn.disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+.pagination-btn.disabled:hover {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #dee2e6;
 }
 .danhmuc-left ul li{
     height: auto;
@@ -933,10 +982,12 @@ footer .fa {
     
     .danhmuc-right-content {
         gap: 10px;
+        justify-content: flex-start; /* Đảm bảo dồn về trái trên tablet */
     }
     
     .danhmuc-right-content-item {
         width: calc(50% - 8px);
+        flex-shrink: 0; /* Ngăn co lại trên tablet */
     }
     
     .danhmuc-right-top-item {
@@ -961,9 +1012,14 @@ footer .fa {
         margin: 10px;
     }
     
+    .danhmuc-right-content {
+        justify-content: flex-start; /* Đảm bảo dồn về trái trên mobile */
+    }
+    
     .danhmuc-right-content-item {
         width: 100%;
         margin-bottom: 15px;
+        flex-shrink: 0; /* Ngăn co lại trên mobile */
     }
     
     .danhmuc-right-content-item img {
@@ -980,6 +1036,23 @@ footer .fa {
     
     .danhmuc-left input[type="submit"] {
         padding: 8px 12px;
+    }
+    
+    .danhmuc-right-bottom {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .pagination-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        min-width: 35px;
     }
 }
 
