@@ -48,6 +48,7 @@ header{
     left: 0;
     top: 0;
     right: 0;
+    z-index: 1000;
 }
 .logo img{
     width: 120px;
@@ -601,8 +602,9 @@ form .form-content .sign-up-text{
 }
 
 .danhmuc-right-content-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 10;
 }
 
 .danhmuc-right-content-item a h3{
@@ -1076,8 +1078,9 @@ footer .fa {
 }
 
 .danhmuc-right-content-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 10;
 }
 
 .danhmuc-right-content-item img {
