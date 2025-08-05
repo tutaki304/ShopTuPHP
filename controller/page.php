@@ -53,13 +53,57 @@
                 break;
             case 'admin_binhluan':
                 include_once 'model/binhluan.php';
-                $ds_binhluan = get_binhluan();
+                try {
+                    $ds_binhluan = get_binhluan();
+                    if(empty($ds_binhluan)) {
+                        $_SESSION['thongbao'] = "Chưa có bình luận nào!";
+                    }
+                } catch(Exception $e) {
+                    $_SESSION['thongbao'] = "Lỗi khi tải danh sách bình luận: " . $e->getMessage();
+                    $ds_binhluan = [];
+                }
                 include_once 'view/product_binhluan.php';
+                break;
+            case 'quan_ly_binh_luan':
+                // Trang quản lý bình luận mới với giao diện đẹp
+                if (!isset($_SESSION['user']) || $_SESSION['user']['quyen'] != 'admin') {
+                    header('Location: index.php');
+                    exit;
+                }
+                include_once 'view/template_admin_head.php';
+                include_once 'view/template_admin_header.php';
+                include_once 'view/admin_binhluan.php';
+                include_once 'view/template_admin_footer.php';
                 break;
              case 'delete_binhluan':
                include_once 'model/binhluan.php';
-               delete_binhluan($_GET['id']);
-               header('Location: admin.php?mod=page&act=admin_binhluan');
+               if(isset($_GET['id']) && !empty($_GET['id'])) {
+                   try {
+                       delete_binhluan($_GET['id']);
+                       // Kiểm tra nếu là AJAX request thì chỉ trả về status
+                       if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                          strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                           echo "success";
+                           exit;
+                       }
+                       $_SESSION['thongbao'] = "Xóa bình luận thành công!";
+                   } catch(Exception $e) {
+                       if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                          strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                           echo "error";
+                           exit;
+                       }
+                       $_SESSION['thongbao'] = "Lỗi khi xóa bình luận: " . $e->getMessage();
+                   }
+               } else {
+                   if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+                      strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                       echo "error";
+                       exit;
+                   }
+                   $_SESSION['thongbao'] = "Không tìm thấy ID bình luận!";
+               }
+               header('Location: admin.php?mod=page&act=quan_ly_binh_luan');
             break;
              
             default:

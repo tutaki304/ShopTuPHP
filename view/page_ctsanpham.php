@@ -24,7 +24,7 @@
                         <p>Mã: <?=$ctsanpham['masp']?></p>
                     </div>
                     <div class="product-content-right-product-price">
-                        <p>Giá gốc: <del style="color: #949292;"><?=$ctsanpham['dongia']?>đ</del> Giá khuyến mãi: <?=$ctsanpham['khuyenmai']?>đ</p>
+                        <p>Giá gốc: <del style="color: #949292;"><?=number_format($ctsanpham['dongia'] * 1000)?>đ</del> Giá khuyến mãi: <?=number_format($ctsanpham['khuyenmai'] * 1000)?>đ</p>
                     </div>
                     <!-- <div class="product-content-right-product-color">
                         <p><span style="font-weight: bold">Màu sắc:</span> Xanh cổ vịt nhạt<span style="color: red">*</span></p>

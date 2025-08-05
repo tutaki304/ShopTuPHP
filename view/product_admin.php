@@ -68,8 +68,8 @@
                 <?=$sp['soluong']?>
             </td>
             <td>
-                <del><?=$sp['dongia']?>đ</del>
-                <?=$sp['khuyenmai']?>đ <br>
+                <del><?=number_format($sp['dongia'] * 1000)?>đ</del>
+                <?=number_format($sp['khuyenmai'] * 1000)?>đ <br>
             </td>
             <td>
                 <a class="edit" href="admin.php?mod=product&act=edit&id=<?=$sp['masp']?>">Edit</a>

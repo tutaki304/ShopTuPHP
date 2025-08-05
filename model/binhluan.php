@@ -10,10 +10,13 @@
         return pdo_query("SELECT * FROM binhluan bl INNER JOIN taikhoan tk ON bl.makh = tk.makh 
         WHERE bl.masp=?",$masp);
     }
-    // lấy cả bình luận hiển thị trong admin
+    // lấy cả bình luận hiển thị trong admin với thông tin người dùng và sản phẩm
     function get_binhluan(){
-        return pdo_query("SELECT * FROM binhluan");
-
+        return pdo_query("SELECT bl.*, tk.hoten, tk.email, sp.tensp 
+                         FROM binhluan bl 
+                         INNER JOIN taikhoan tk ON bl.makh = tk.makh 
+                         INNER JOIN sanpham sp ON bl.masp = sp.masp
+                         ORDER BY bl.ngaygui DESC");
     }
     //xóa bình luận
     function delete_binhluan($mabl){

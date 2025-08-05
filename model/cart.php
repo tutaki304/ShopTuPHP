@@ -62,7 +62,7 @@
     
     // lấy tổng tiền giỏ hàng
     function get_cartTotalPrice($makh){
-        $result = pdo_query_one("SELECT SUM(ct.soluong * sp.giasp) as total FROM hoadon hd 
+        $result = pdo_query_one("SELECT SUM(ct.soluong * (sp.khuyenmai * 1000)) as total FROM hoadon hd 
                                 INNER JOIN chitiethoadon ct ON hd.mahd = ct.mahd 
                                 INNER JOIN sanpham sp ON ct.masp = sp.masp
                                 WHERE hd.makh=? AND hd.trangthai=?", $makh, 'gio-hang');

@@ -339,7 +339,7 @@ $viewed_products = get_productView(6);
                                             <?= $product['tendm'] ?? 'N/A' ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            <?= number_format($product['khuyenmai']) ?>đ
+                                            <?= number_format($product['khuyenmai'] * 1000) ?>đ
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
@@ -488,7 +488,7 @@ $viewed_products = get_productView(6);
                                             <?= $product['tensp'] ?>
                                         </p>
                                         <p class="text-sm text-gray-500">
-                                            <?= number_format($product['khuyenmai']) ?>đ
+                                            <?= number_format($product['khuyenmai'] * 1000) ?>đ
                                         </p>
                                     </div>
                                     <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">

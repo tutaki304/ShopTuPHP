@@ -41,7 +41,7 @@
                     <a href="admin.php?mod=user&act=user"><i class="fa-solid fa-user"></i> Tài khoản</a>
                 </li>
                 <li>
-                    <a  href="admin.php?mod=page&act=admin_binhluan"><i class="fa-solid fa-comment"></i> Bình Luận</a>
+                    <a  href="admin.php?mod=page&act=quan_ly_binh_luan"><i class="fa-solid fa-comment"></i> Bình Luận</a>
                 </li>
             </ul>
         </div>

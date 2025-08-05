@@ -628,7 +628,7 @@
                                                min="1" 
                                                max="99" 
                                                value="<?=isset($item['soluong']) ? (int)$item['soluong'] : 1?>"
-                                               data-price="<?=(float)$item['khuyenmai']?>"
+                                               data-price="<?=(float)$item['khuyenmai'] * 1000?>"
                                                onchange="updateQuantity(this, <?=$item['masp']?>)"
                                                readonly>
                                         <button type="button" class="quantity-btn" onclick="changeQuantity(<?=$item['masp']?>, 1)">+</button>
@@ -636,9 +636,9 @@
                                 </div>
                                 
                                 <div class="product-price">
-                                    <span class="original-price"><?=number_format($item['dongia'])?>đ</span>
-                                    <span class="sale-price"><?=number_format($item['khuyenmai'])?>đ</span>
-                                    <span class="savings">(Tiết kiệm: <?=number_format($item['dongia'] - $item['khuyenmai'])?>đ)</span>
+                                    <span class="original-price"><?=number_format($item['dongia'] * 1000)?>đ</span>
+                                    <span class="sale-price"><?=number_format($item['khuyenmai'] * 1000)?>đ</span>
+                                    <span class="savings">(Tiết kiệm: <?=number_format(($item['dongia'] - $item['khuyenmai']) * 1000)?>đ)</span>
                                 </div>
                             </div>
                         </div>

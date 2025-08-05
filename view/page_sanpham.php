@@ -57,7 +57,7 @@
                             </a>
                             <p>
                                 <span>Mã: <?=$sp['masp']?></span>
-                                <span class="price"><?=number_format($sp['khuyenmai']??$sp['dongia'])?>đ</span>
+                                <span class="price"><?=number_format(($sp['khuyenmai']??$sp['dongia']) * 1000)?>đ</span>
                             </p>
                         </div>
                         <?php
