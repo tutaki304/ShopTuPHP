@@ -3,24 +3,30 @@
     <nav>
         <strong>Trang quản trị</strong>
         <div class="khungadmin">
-            <button>
-                    <span class="sa-toolbar-use-img">
-                        <img src="<?=$_SESSION['user']['anh']?>" alt="" width="40px">
+            <button id="admin-dropdown-btn" onclick="toggleAdminDropdown()">
+                <span class="sa-toolbar-use-img">
+                    <img src="<?=$_SESSION['user']['anh']?>" alt="" width="40px">
+                </span>
+                <span class="sa-toolbar-user-thongtin">
+                    <span class="sa-toolbar-user-ten">
+                        <?=$_SESSION['user']['hoten']?>
                     </span>
-                    <span class="sa-toolbar-user-thongtin">
-                        <span class="sa-toolbar-user-ten">
-                            <?=$_SESSION['user']['hoten']?>
-                        </span>
-                        <small class="sa-toolbar-user-email">
-                            <?=$_SESSION['user']['email']?>
-                        </small>
-                    </span>
-                    <i class="fa-solid fa-caret-down"></i>
+                    <small class="sa-toolbar-user-email">
+                        <?=$_SESSION['user']['email']?>
+                    </small>
+                </span>
+                <i class="fa-solid fa-caret-down" id="admin-dropdown-arrow"></i>
             </button>
-            <ul class="dangxuat">
+            <ul class="dangxuat" id="admin-dropdown-menu">
                 <li>
-                    <a class="khungadmin-item" href="?mod=user&act=logout">Sign Out</a><br>
-                    <a class="khungadmin-item" href="index.php?mod=product&act=sanpham">Về trang chủ</a>
+                    <a class="khungadmin-item" href="?mod=user&act=logout">
+                        <i class="fa-solid fa-sign-out-alt"></i> Sign Out
+                    </a>
+                </li>
+                <li>
+                    <a class="khungadmin-item" href="index.php">
+                        <i class="fa-solid fa-home"></i> Về trang chủ
+                    </a>
                 </li>
             </ul>
         </div>
@@ -46,3 +52,25 @@
             </ul>
         </div>
         <div class="col-9">
+
+<script>
+function toggleAdminDropdown() {
+    const dropdown = document.getElementById('admin-dropdown-menu');
+    const arrow = document.getElementById('admin-dropdown-arrow');
+    
+    dropdown.classList.toggle('show');
+    arrow.classList.toggle('rotate');
+}
+
+// Đóng dropdown khi click bên ngoài
+document.addEventListener('click', function(event) {
+    const khungadmin = document.querySelector('.khungadmin');
+    const dropdown = document.getElementById('admin-dropdown-menu');
+    const arrow = document.getElementById('admin-dropdown-arrow');
+    
+    if (!khungadmin.contains(event.target)) {
+        dropdown.classList.remove('show');
+        arrow.classList.remove('rotate');
+    }
+});
+</script>

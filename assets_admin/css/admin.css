@@ -337,7 +337,7 @@ button {
     display: inline-block;
 }
 
-/* Enhanced Dropdown */
+/* Enhanced Dropdown - Click based */
 .dangxuat {
     display: none;
     position: absolute;
@@ -346,18 +346,51 @@ button {
     background: white;
     border-radius: 12px;
     padding: 8px 0;
-    min-width: 180px;
+    min-width: 200px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     z-index: 1001;
     opacity: 0;
     transform: translateY(-10px);
     transition: all 0.3s ease;
+    list-style: none;
+    margin: 0;
 }
 
-.khungadmin:hover .dangxuat {
+/* Hiển thị dropdown khi có class 'show' */
+.dangxuat.show {
     display: block;
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Animation cho mũi tên */
+#admin-dropdown-arrow {
+    transition: transform 0.3s ease;
+}
+
+#admin-dropdown-arrow.rotate {
+    transform: rotate(180deg);
+}
+
+/* Styling cho button */
+#admin-dropdown-btn {
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    min-width: 220px;
+}
+
+#admin-dropdown-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
 }
 
 .dangxuat::before {
@@ -372,13 +405,22 @@ button {
     border-bottom: 8px solid white;
 }
 
+.dangxuat li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
 .khungadmin-item {
-    display: block;
-    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
     color: #2c3e50;
     font-weight: 500;
     font-size: 14px;
     transition: all 0.3s ease;
+    text-decoration: none;
     border-radius: 0;
 }
 
@@ -392,6 +434,7 @@ button {
     margin-right: 8px;
     width: 16px;
     text-align: center;
+    font-size: 14px;
 }
 
 /* Loading Animation */
