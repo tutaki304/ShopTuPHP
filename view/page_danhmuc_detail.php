@@ -70,7 +70,7 @@
                     <ul>
                         <h4>DANH MỤC</h4>
                         <?php foreach($data['dsdm'] as $dm): ?>
-                            <li class="danhmuc-left-li">
+                            <li class="danhmuc-left-li <?= ($dm['madm'] == $category_id) ? 'active' : '' ?>">
                                 <a href="index.php?mod=product&act=detail&id=<?=$dm['madm']?>">
                                     <?=$dm['tendm']?>
                                 </a> <hr color="#ddd">

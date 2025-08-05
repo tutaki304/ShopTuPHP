@@ -746,6 +746,22 @@ form .form-content .sign-up-text{
   padding: 5px;
 }
 
+/* Style cho danh mục đang active */
+.danhmuc-left-li.active {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.danhmuc-left-li.active a {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.danhmuc-left-li.active hr {
+    border-color: #007bff;
+}
+
 .danhmuc-left-li.block ul {
     display: block;
 }
