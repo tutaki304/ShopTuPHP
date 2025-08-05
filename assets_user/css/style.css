@@ -68,7 +68,7 @@ header{
     margin-right:30px;
 }
 .nav-right a:hover{
-    color:deeppink;
+    color: #007bff; /* Thay đổi từ deeppink sang màu xanh dương */
 }
 
 

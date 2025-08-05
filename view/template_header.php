@@ -40,7 +40,8 @@
         }
 
         .user-info-link:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: rgba(0, 123, 255, 0.1); /* Nền xanh dương nhạt */
+            color: #007bff; /* Chữ màu xanh dương */
         }
 
         .user-dropdown {
@@ -63,7 +64,7 @@
 
         .user-profile {
             padding: 16px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e2020ff 0%, #353431ff 100%);
             color: white;
             margin: -8px 0 8px 0;
             border-radius: 8px 8px 0 0;
