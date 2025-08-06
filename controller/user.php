@@ -71,26 +71,41 @@
                 break;
                 //thêm tài khoản
             case 'add_user':
-                if ( !(isset($_SESSION['user']) && $_SESSION['user']['quyen']='admin')) {
+                if ( !(isset($_SESSION['user']) && $_SESSION['user']['quyen']=='admin')) {
                     header('Location: index.php');
+                    exit();
                 }
                 include_once 'model/connect.php';
-                include_once 'model/products.php';
                 include_once 'model/user.php';
                 if(isset($_POST['submit'])){
-                    $hoten= $_POST['hoten'];
-                    $email= $_POST['email'];
-                    $diachi= $_POST['diachi'];
-                    $sdt= $_POST['sdt'];
-                    $quyen= $_POST['quyen'];
-                    $kq = user_checkPhone($sdt);
-                    if($kq){//đúng /bị trùng /khong thêm
-                        $_SESSION['loi']='không thể tạo tài khoản số điện thoại <strong>'.$sdt.'</strong> này đã tồn tại!';
-                    } else{
-                        $matkhau = 12345;
-                        $anh = 'upload/avatar/default.png';
-                        add_user($hoten,$anh,$email,$diachi,$sdt,$matkhau,$quyen);
-                        $_SESSION['thongbao']='Đã tạo tài khoản với sdt <strong>'.$sdt.'</strong> và mật khẩu mặc định là <strong>'.$matkhau.'</strong>;';
+                    $hoten = trim($_POST['hoten']);
+                    $anh = !empty($_POST['anh']) ? $_POST['anh'] : 'upload/avatar/default.png';
+                    $email = trim($_POST['email']);
+                    $diachi = trim($_POST['diachi']);
+                    $sdt = trim($_POST['sdt']);
+                    $matkhau = !empty($_POST['matkhau']) ? $_POST['matkhau'] : '12345';
+                    $quyen = $_POST['quyen'];
+                    
+                    // Validate dữ liệu
+                    if(empty($hoten) || empty($email) || empty($sdt) || empty($quyen)) {
+                        $_SESSION['loi'] = 'Vui lòng điền đầy đủ thông tin bắt buộc!';
+                    } else {
+                        // Kiểm tra email đã tồn tại
+                        $check_email = user_checkEmail($email);
+                        if($check_email) {
+                            $_SESSION['loi'] = 'Email <strong>'.$email.'</strong> đã tồn tại trong hệ thống!';
+                        } else {
+                            // Kiểm tra số điện thoại đã tồn tại
+                            $kq = user_checkPhone($sdt);
+                            if($kq) {
+                                $_SESSION['loi'] = 'Số điện thoại <strong>'.$sdt.'</strong> đã tồn tại trong hệ thống!';
+                            } else {
+                                // Tạo tài khoản thành công
+                                add_user($hoten, $anh, $email, $diachi, $sdt, $matkhau, $quyen);
+                                $role_text = ($quyen == 'admin') ? 'Quản trị viên' : 'Khách hàng';
+                                $_SESSION['thongbao'] = 'Đã tạo tài khoản <strong>'.$role_text.'</strong> thành công!<br>Email: <strong>'.$email.'</strong><br>Mật khẩu: <strong>'.$matkhau.'</strong>';
+                            }
+                        }
                     }
 
                 }
