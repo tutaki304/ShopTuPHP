@@ -99,18 +99,22 @@
                 ?>
             </td>
             <td>
-                <a class="edit" href="admin.php?mod=user&act=edit_user&id=<?=$tk['makh']?>">Edit</a>
-                <a class="xoa" onclick="deleteProduct(<?=$tk['makh']?>)" href="admin.php?mod=user&act=delete_user&id=<?=$tk['makh']?>"> Delete</a>
+                <?php if($tk['quyen'] == 'admin'): ?>
+                    <span style="color: #888; font-size: 12px; font-style: italic;">Tài Khoản Admin</span>
+                <?php else: ?>
+                    <a class="edit" href="admin.php?mod=user&act=edit_user&id=<?=$tk['makh']?>">Edit</a>
+                    <a class="xoa" onclick="deleteUser(<?=$tk['makh']?>)" href="admin.php?mod=user&act=delete_user&id=<?=$tk['makh']?>"> Delete</a>
+                <?php endif; ?>
             </td>
         </tr>
         <?php $i++; endforeach; ?>
     </tbody>
 </table>
 <script>
-    function deleteProduct(id){
-        var kq = confirm("Bạn có muốn xoá sản phẩm này không!");
+    function deleteUser(id){
+        var kq = confirm("Bạn có muốn xoá tài khoản này không!");
         if (kq) {
-            //KQ đúng -> xoá SP
+            //KQ đúng -> xoá tài khoản
             window.location.search='?mod=user&act=delete_user&id='+id;
         }
     }

@@ -108,7 +108,7 @@
         <?php foreach($spcungdanhmuc as $ctsanpham): ?>
             <div class="product-related-item">
                 <a href="?mod=product&act=ctsanpham&id=<?=$ctsanpham['masp']?>"><img src="upload/product/<?=$ctsanpham['anh']?>"><br></a>
-                <p>Mã: <?=$ctsanpham['masp']?><span><?=$ctsanpham['khuyenmai']?>đ</span></p>
+                <p>Mã: <?=$ctsanpham['masp']?><span><?=number_format($ctsanpham['khuyenmai'] * 1000)?>đ</span></p>
                 <a href=""><h3><?=$ctsanpham['tensp']?></h3></a>
             </div>
         <?php endforeach; ?>

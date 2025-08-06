@@ -5,17 +5,33 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['quyen'] != 'admin') {
     exit();
 }
 
-// Lấy danh sách bình luận
-include_once 'model/binhluan.php';
-try {
-    $ds_binhluan = get_binhluan();
-} catch(Exception $e) {
-    $_SESSION['thongbao'] = "Lỗi khi tải danh sách bình luận: " . $e->getMessage();
+// Dữ liệu bình luận đã được tải từ controller
+if (!isset($ds_binhluan)) {
     $ds_binhluan = [];
 }
 ?>
 
 <style>
+    /* Ẩn hoàn toàn header của user nếu có */
+    .header-user,
+    .main-header,
+    .user-navigation,
+    header nav.main-nav,
+    .nav-main,
+    .khung,
+    .container-header {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Đảm bảo body không có margin/padding từ header user */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
     .user-info {
         display: flex;
         align-items: center;

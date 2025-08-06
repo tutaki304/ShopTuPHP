@@ -120,10 +120,10 @@ $viewed_products = get_productView(6);
             }
         }
         
-        /* Responsive: Hiển thị 4 cột trên desktop (1280px+) */
-        @media (min-width: 1280px) {
+        /* Responsive: Hiển thị 3 cột trên desktop (1024px+) */
+        @media (min-width: 1024px) {
             .stats-grid {
-                grid-template-columns: repeat(4, 1fr);  /* 4 cột trên desktop */
+                grid-template-columns: repeat(3, 1fr);  /* 3 cột trên desktop */
             }
         }
         
@@ -190,11 +190,6 @@ $viewed_products = get_productView(6);
         /* CSS cho nền gradient màu tím thay thế - dùng cho icon */
         .bg-gradient-purple-alt {
             background: linear-gradient(45deg, #8b5cf6, #6d28d9); /* Gradient tím nhạt -> tím đậm */
-        }
-        
-        /* CSS cho nền gradient màu cam - dùng cho icon */
-        .bg-gradient-orange {
-            background: linear-gradient(45deg, #f59e0b, #d97706); /* Gradient cam nhạt -> cam đậm */
         }
     </style>
 </head>
@@ -274,27 +269,6 @@ $viewed_products = get_productView(6);
                     </div>
                     <div class="stat-icon bg-gradient-purple-alt">
                         <i class="fas fa-tags text-xl"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Hiệu suất -->
-            <div class="stat-card">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h4 class="text-gray-600 text-sm font-medium">Hiệu suất</h4>
-                        <div class="mt-2">
-                            <h2 class="text-3xl font-bold text-gray-900">
-                                98%
-                            </h2>
-                            <p class="text-sm text-green-600 mt-1">
-                                <i class="fas fa-arrow-up mr-1"></i>
-                                +5% từ tháng trước
-                            </p>
-                        </div>
-                    </div>
-                    <div class="stat-icon bg-gradient-orange">
-                        <i class="fas fa-chart-line text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -422,7 +396,7 @@ $viewed_products = get_productView(6);
                                 </span>
                             </div>
                             
-                            <!-- 3. THEO DÕI SỬ DỤNG BỘ NHỚ -->
+                            3. THEO DÕI SỬ DỤNG BỘ NHỚ
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600">Bộ nhớ</span>
                                 <!-- Nhãn hiển thị: Memory/RAM usage -->

@@ -34,7 +34,7 @@
         <?php foreach($dsNew as $sp): ?>
             <div class="product">
                 <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>"><img src="upload/product/<?=$sp['anh']?>"></a><br>
-                <p>Mã: <?=$sp['masp']?><span><?=$sp['khuyenmai']?>đ</span></p>
+                <p>Mã: <?=$sp['masp']?><span><?=number_format($sp['khuyenmai'] * 1000)?>đ</span></p>
                 <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>"><h3><?=$sp['tensp']?></h3></a>
             </div>
         <?php  endforeach; ?>
@@ -55,7 +55,7 @@
                 <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>">
                     <img src="upload/product/<?=$sp['anh']?>"><br>
                 </a>
-                <p>Mã: <?=$sp['masp']?><span><?=$sp['khuyenmai']?>đ</span></p>
+                <p>Mã: <?=$sp['masp']?><span><?=number_format($sp['khuyenmai'] * 1000)?>đ</span></p>
                 <a href="?mod=product&act=ctsanpham&id=<?=$sp['masp']?>"><h3><?=$sp['tensp']?></h3></a>
             </div>
         <?php

@@ -272,9 +272,35 @@ if ($_GET['act']) {
                 $ghichu = $_POST['ghichu'];
                 $trangthai = 'chuan-bi-don-hang';
                 get_updateCart($giohang['mahd'], $makh, $ngaydathang, $tongtien, $ghichu, $trangthai);
+                
+                // Lưu thông tin đơn hàng để hiển thị trong trang success
+                $_SESSION['order_info'] = [
+                    'mahd' => $giohang['mahd'],
+                    'ngaydathang' => $ngaydathang,
+                    'tongtien' => $tongtien,
+                    'ghichu' => $ghichu,
+                    'trangthai' => $trangthai
+                ];
+                
                 $_SESSION['thongbao']='Đơn hàng của bạn đang được chuẩn bị!';
+                header('Location: ?mod=product&act=checkout_success');
+            } else {
+                header('Location: ?mod=page&act=giohang');
             }
-            header('Location: ?mod=page&act=giohang');
+            break;
+            
+        // Trang thanh toán thành công
+        case 'checkout_success':
+            include_once 'view/page_checkout_success.php';
+            break;
+            
+        // Xóa thông tin đơn hàng khỏi session
+        case 'clear_order_session':
+            if(isset($_SESSION['order_info'])) {
+                unset($_SESSION['order_info']);
+            }
+            echo json_encode(['status' => 'success']);
+            exit;
             break;
             //quản lý sản phẩm
         case 'admin':

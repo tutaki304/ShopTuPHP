@@ -3,8 +3,9 @@
 //gọi dc: view, model
     include_once 'model/connect.php';
     
-    // Chỉ load template cho trang user, không load cho dashboard admin
-    if (!isset($_GET['act']) || $_GET['act'] !== 'dashboard') {
+    // Chỉ load template cho trang user, không load cho admin pages
+    $admin_pages = ['dashboard', 'admin_binhluan', 'quan_ly_binh_luan', 'delete_binhluan'];
+    if (!isset($_GET['act']) || !in_array($_GET['act'], $admin_pages)) {
         include_once 'view/template_head.php';
         include_once 'view/template_header.php';
     }
@@ -52,6 +53,10 @@
                 include_once 'view/page_dashboard.php';
                 break;
             case 'admin_binhluan':
+                if (!isset($_SESSION['user']) || $_SESSION['user']['quyen'] != 'admin') {
+                    header('Location: index.php');
+                    exit;
+                }
                 include_once 'model/binhluan.php';
                 try {
                     $ds_binhluan = get_binhluan();
@@ -62,13 +67,26 @@
                     $_SESSION['thongbao'] = "Lỗi khi tải danh sách bình luận: " . $e->getMessage();
                     $ds_binhluan = [];
                 }
-                include_once 'view/product_binhluan.php';
+                include_once 'view/template_admin_head.php';
+                include_once 'view/template_admin_header.php';
+                include_once 'view/admin_binhluan.php';
+                include_once 'view/template_admin_footer.php';
                 break;
             case 'quan_ly_binh_luan':
                 // Trang quản lý bình luận mới với giao diện đẹp
                 if (!isset($_SESSION['user']) || $_SESSION['user']['quyen'] != 'admin') {
                     header('Location: index.php');
                     exit;
+                }
+                include_once 'model/binhluan.php';
+                try {
+                    $ds_binhluan = get_binhluan();
+                    if(empty($ds_binhluan)) {
+                        $_SESSION['thongbao'] = "Chưa có bình luận nào!";
+                    }
+                } catch(Exception $e) {
+                    $_SESSION['thongbao'] = "Lỗi khi tải danh sách bình luận: " . $e->getMessage();
+                    $ds_binhluan = [];
                 }
                 include_once 'view/template_admin_head.php';
                 include_once 'view/template_admin_header.php';
