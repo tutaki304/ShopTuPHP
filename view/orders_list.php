@@ -349,13 +349,6 @@
             <a href="admin.php?mod=order&act=filter&status=da-giao" class="btn btn-success">
                 <i class="fas fa-check"></i> Hoàn thành
             </a>
-            <a href="admin.php?mod=order&act=statistics" class="btn btn-primary">
-                <i class="fas fa-chart-bar"></i> Thống kê
-            </a>
-            <a href="admin.php?mod=order&act=fix_totals" class="btn btn-danger" 
-               onclick="return confirm('Bạn có chắc muốn sửa lỗi giá cho tất cả đơn hàng?')">
-                <i class="fas fa-wrench"></i> Sửa lỗi giá
-            </a>
         </div>
 
         <form method="POST" action="admin.php?mod=order&act=search" class="search-form">
