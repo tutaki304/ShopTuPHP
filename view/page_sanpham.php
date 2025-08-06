@@ -8,10 +8,10 @@
         <div class="container-danhmuc">
             <div class="row">
                 <div class="danhmuc-left">
-                    <form action="" id="search" method="POST">
+                    <form action="index.php" method="POST">
                         <input type="hidden" name="mod" value="product">
                         <input type="hidden" name="act" value="search">
-                        <input type="text" name="keyword" placeholder="Nhập tên sãn phẩm cần tìm">
+                        <input type="text" name="keyword" placeholder="Nhập tên sản phẩm cần tìm">
                         <input type="submit" name="submit" id="search" value="Tìm">
                     </form>
                     <ul>

@@ -602,6 +602,7 @@
         <form action="?mod=product&act=updateCart" method="post" id="checkout-form">
             <input type="hidden" name="tongtien" id="tongtien">
             <input type="hidden" name="phivanchuyen" id="phivanchuyen" value="19000">
+            <input type="hidden" name="ngaydathang" value="<?php echo date('Y-m-d H:i:s'); ?>">
             
             <div class="checkout-container">
                 <!-- Chi tiết đơn hàng -->
@@ -1178,12 +1179,15 @@
             orderBtn.textContent = 'ĐANG XỬ LÝ...';
             orderBtn.disabled = true;
 
-            // Giả lập thời gian xử lý
-            setTimeout(() => {
-                this.showNotification('Đơn hàng đã được đặt thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.', 'success');
+            // Thực sự submit form
+            const form = document.getElementById('checkout-form');
+            if (form) {
+                form.submit();
+            } else {
                 orderBtn.textContent = originalText;
                 orderBtn.disabled = false;
-            }, 1500);
+                this.showNotification('Có lỗi xảy ra. Vui lòng thử lại!', 'error');
+            }
         }
     }
 

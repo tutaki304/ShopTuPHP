@@ -108,9 +108,15 @@
         return $stmt->execute();
     }
 
-    // function product_search($keyword){
-    //     return pdo_query("SELECT * FROM sanpham WHERE tensp LIKE '%$keyword%'");
-    // }
+    // Tìm kiếm sản phẩm theo từ khóa
+    function product_search($keyword){
+        $sql = "SELECT s.*, d.tendm FROM sanpham s 
+                INNER JOIN danhmuc d ON s.madm = d.madm 
+                WHERE s.tensp LIKE ? OR d.tendm LIKE ?
+                ORDER BY s.masp DESC";
+        $search_term = "%$keyword%";
+        return pdo_query($sql, $search_term, $search_term);
+    }
 
     // Lấy sản phẩm với pagination
     function get_products_with_pagination($limit, $offset) {

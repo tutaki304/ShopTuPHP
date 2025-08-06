@@ -291,7 +291,10 @@ if ($_GET['act']) {
             
         // Trang thanh toán thành công
         case 'checkout_success':
+            include_once 'view/template_head.php';
+            include_once 'view/template_header.php';
             include_once 'view/page_checkout_success.php';
+            include_once 'view/template_footer.php';
             break;
             
         // Xóa thông tin đơn hàng khỏi session
@@ -443,6 +446,30 @@ if ($_GET['act']) {
             }
 
             break;
+            
+        case 'search':
+            include_once 'model/products.php';
+            include_once 'model/categories.php';
+            
+            if(isset($_POST['keyword']) && !empty($_POST['keyword'])) {
+                $keyword = $_POST['keyword'];
+                $search_results = product_search($keyword);
+                $data['dssp'] = $search_results;
+                $data['keyword'] = $keyword;
+            } else {
+                $data['dssp'] = [];
+                $data['keyword'] = '';
+            }
+            
+            // Lấy danh mục để hiển thị sidebar
+            $data['dsdm'] = get_categories();
+            
+            include_once 'view/template_head.php';
+            include_once 'view/template_header.php';
+            include_once 'view/page_product_search.php';
+            include_once 'view/template_footer.php';
+            break;
+            
         default:
             # 404 - trang web không tồn tại!
             break;
