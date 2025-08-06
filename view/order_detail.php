@@ -313,7 +313,8 @@
                 <?php 
                 $total = 0;
                 foreach($order_details as $item): 
-                    $subtotal = $item['dongia'] * $item['soluong'];
+                    $effective_price = $item['effective_price'] ?? 0;
+                    $subtotal = $effective_price * $item['soluong'];
                     $total += $subtotal;
                 ?>
                 <tr>
@@ -323,7 +324,7 @@
                             <div class="product-name"><?= htmlspecialchars($item['tensp']) ?></div>
                         </div>
                     </td>
-                    <td><?= number_format($item['dongia'] * 1000) ?>đ</td>
+                    <td><?= number_format($effective_price * 1000) ?>đ</td>
                     <td><?= $item['soluong'] ?></td>
                     <td><strong><?= number_format($subtotal * 1000) ?>đ</strong></td>
                 </tr>

@@ -11,6 +11,46 @@ function get_all_orders() {
     return pdo_query($sql);
 }
 
+// Tính tổng tiền của một đơn hàng từ chi tiết
+function calculate_order_total($mahd) {
+    $sql = "SELECT SUM(ct.soluong * 
+                CASE 
+                    WHEN ct.dongia > 0 THEN ct.dongia
+                    WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
+                    ELSE sp.dongia
+                END
+            ) as total 
+            FROM chitiethoadon ct
+            INNER JOIN sanpham sp ON ct.masp = sp.masp
+            WHERE ct.mahd = ?";
+    $result = pdo_query_one($sql, $mahd);
+    return $result['total'] ?? 0;
+}
+
+// Lấy tất cả đơn hàng với tổng tiền được tính toán
+function get_all_orders_with_calculated_total() {
+    $sql = "SELECT hd.*, tk.hoten, tk.email, tk.sdt,
+            CASE 
+                WHEN hd.tongtien > 0 THEN hd.tongtien
+                ELSE (
+                    SELECT COALESCE(SUM(ct.soluong * 
+                        CASE 
+                            WHEN ct.dongia > 0 THEN ct.dongia
+                            WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
+                            ELSE sp.dongia
+                        END
+                    ), 0) 
+                    FROM chitiethoadon ct 
+                    INNER JOIN sanpham sp ON ct.masp = sp.masp
+                    WHERE ct.mahd = hd.mahd
+                )
+            END as calculated_total
+            FROM hoadon hd 
+            INNER JOIN taikhoan tk ON hd.makh = tk.makh 
+            ORDER BY hd.ngaydathang DESC";
+    return pdo_query($sql);
+}
+
 // Lấy đơn hàng theo ID
 function get_order_by_id($mahd) {
     $sql = "SELECT hd.*, tk.hoten, tk.email, tk.sdt, tk.diachi 
@@ -22,7 +62,12 @@ function get_order_by_id($mahd) {
 
 // Lấy chi tiết đơn hàng
 function get_order_details($mahd) {
-    $sql = "SELECT ct.*, sp.tensp, sp.anh, sp.dongia as gia_goc
+    $sql = "SELECT ct.*, sp.tensp, sp.anh, sp.dongia as gia_goc,
+            CASE 
+                WHEN ct.dongia > 0 THEN ct.dongia
+                WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
+                ELSE sp.dongia
+            END as effective_price
             FROM chitiethoadon ct 
             INNER JOIN sanpham sp ON ct.masp = sp.masp 
             WHERE ct.mahd = ?";
@@ -121,5 +166,31 @@ function get_best_selling_products($limit = 10) {
             ORDER BY tong_ban DESC 
             LIMIT ?";
     return pdo_query($sql, $limit);
+}
+
+// Cập nhật tổng tiền cho một đơn hàng
+function update_order_total($mahd) {
+    $total = calculate_order_total($mahd);
+    $sql = "UPDATE hoadon SET tongtien = ? WHERE mahd = ?";
+    return pdo_execute($sql, $total, $mahd);
+}
+
+// Sửa tất cả đơn hàng có tổng tiền = 0
+function fix_all_order_totals() {
+    $sql = "UPDATE hoadon hd 
+            SET tongtien = (
+                SELECT COALESCE(SUM(ct.soluong * 
+                    CASE 
+                        WHEN ct.dongia > 0 THEN ct.dongia
+                        WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
+                        ELSE sp.dongia
+                    END
+                ), 0)
+                FROM chitiethoadon ct 
+                INNER JOIN sanpham sp ON ct.masp = sp.masp
+                WHERE ct.mahd = hd.mahd
+            )
+            WHERE hd.tongtien = 0 OR hd.tongtien IS NULL";
+    return pdo_execute($sql);
 }
 ?>

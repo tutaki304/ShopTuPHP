@@ -259,6 +259,30 @@
             flex-direction: column;
         }
     }
+    
+    /* CSS cho thông báo alert */
+    .alert {
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .alert-success {
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        border: 1px solid #b8dacc;
+        color: #155724;
+    }
+    
+    .alert-error {
+        background: linear-gradient(135deg, #f8d7da, #f1b0b7);
+        border: 1px solid #f1b0b7;
+        color: #721c24;
+    }
 </style>
 
 <div class="orders-container">
@@ -328,6 +352,10 @@
             <a href="admin.php?mod=order&act=statistics" class="btn btn-primary">
                 <i class="fas fa-chart-bar"></i> Thống kê
             </a>
+            <a href="admin.php?mod=order&act=fix_totals" class="btn btn-danger" 
+               onclick="return confirm('Bạn có chắc muốn sửa lỗi giá cho tất cả đơn hàng?')">
+                <i class="fas fa-wrench"></i> Sửa lỗi giá
+            </a>
         </div>
 
         <form method="POST" action="admin.php?mod=order&act=search" class="search-form">
@@ -363,7 +391,7 @@
                     <td><?= htmlspecialchars($order['email']) ?></td>
                     <td><?= htmlspecialchars($order['sdt']) ?></td>
                     <td><?= date('d/m/Y', strtotime($order['ngaydathang'])) ?></td>
-                    <td><strong><?= number_format($order['tongtien'] * 1000) ?>đ</strong></td>
+                    <td><strong><?= number_format((isset($order['calculated_total']) ? $order['calculated_total'] : $order['tongtien']) * 1000) ?>đ</strong></td>
                     <td>
                         <span class="status-badge status-<?= $order['trangthai'] ?>">
                             <?php

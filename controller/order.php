@@ -13,7 +13,7 @@ if (isset($_GET['act'])) {
     switch ($_GET['act']) {
         case 'list':
             // Hiển thị danh sách đơn hàng
-            $orders = get_all_orders();
+            $orders = get_all_orders_with_calculated_total();
             $statistics = get_order_statistics();
             
             include_once 'view/template_admin_head.php';
@@ -158,6 +158,17 @@ if (isset($_GET['act'])) {
             include_once 'view/template_admin_header.php';
             include_once 'view/order_statistics.php';
             include_once 'view/template_admin_footer.php';
+            break;
+            
+        case 'fix_totals':
+            // Sửa lỗi giá đơn hàng bằng 0
+            $result = fix_all_order_totals();
+            if ($result) {
+                $_SESSION['success'] = "Đã sửa lỗi giá thành công!";
+            } else {
+                $_SESSION['error'] = "Có lỗi xảy ra khi sửa giá!";
+            }
+            header('Location: admin.php?mod=order&act=list');
             break;
             
         default:

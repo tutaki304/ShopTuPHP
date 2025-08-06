@@ -47,7 +47,7 @@ $recent_products = get_productNew(6);
 $viewed_products = get_productView(6);
 
 // Lấy đơn hàng gần đây
-$recent_orders = get_all_orders();
+$recent_orders = get_all_orders_with_calculated_total();
 $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần nhất
 ?>
 
@@ -560,7 +560,7 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                                         <?= date('d/m/Y', strtotime($order['ngaydathang'])) ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <?= number_format($order['tongtien'] * 1000) ?>đ
+                                        <?= number_format($order['calculated_total'] * 1000) ?>đ
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <?php
