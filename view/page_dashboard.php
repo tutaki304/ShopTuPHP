@@ -10,6 +10,7 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['quyen'] != 'admin') {
 include_once 'model/products.php';
 include_once 'model/user.php';
 include_once 'model/categories.php';
+include_once 'model/orders.php';
 
 // Đếm sản phẩm
 $count_products = count_products();
@@ -23,11 +24,31 @@ $total_categories = count($categories);
 $accounts = getAllAccounts();
 $total_accounts = count($accounts);
 
+// Thống kê đơn hàng
+$order_statistics = get_order_statistics();
+$total_orders = 0;
+$pending_orders = 0;
+$completed_orders = 0;
+
+foreach($order_statistics as $stat) {
+    $total_orders += $stat['so_luong'];
+    if($stat['trangthai'] == 'chuan-bi-don-hang') {
+        $pending_orders = $stat['so_luong'];
+    }
+    if($stat['trangthai'] == 'da-giao') {
+        $completed_orders = $stat['so_luong'];
+    }
+}
+
 // Lấy sản phẩm mới nhất
 $recent_products = get_productNew(6);
 
 // Lấy sản phẩm xem nhiều nhất
 $viewed_products = get_productView(6);
+
+// Lấy đơn hàng gần đây
+$recent_orders = get_all_orders();
+$recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần nhất
 ?>
 
 <!DOCTYPE html>
@@ -182,6 +203,11 @@ $viewed_products = get_productView(6);
             background: linear-gradient(45deg, #3b82f6, #1d4ed8); /* Gradient xanh nhạt -> xanh đậm */
         }
         
+        /* CSS cho nền gradient màu cam - dùng cho icon đơn hàng */
+        .bg-gradient-orange {
+            background: linear-gradient(45deg, #f59e0b, #d97706); /* Gradient cam nhạt -> cam đậm */
+        }
+        
         /* CSS cho nền gradient màu xanh lá - dùng cho icon */
         .bg-gradient-green {
             background: linear-gradient(45deg, #10b981, #047857); /* Gradient xanh lá nhạt -> đậm */
@@ -233,6 +259,24 @@ $viewed_products = get_productView(6);
                     </div>
                     <div class="stat-icon bg-gradient-blue">
                         <i class="fas fa-box text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tổng đơn hàng -->
+            <div class="stat-card">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-gray-600 text-sm font-medium">Đơn hàng</h4>
+                        <div class="mt-2">
+                            <h2 class="text-3xl font-bold text-gray-900">
+                                <?= $total_orders ?>
+                            </h2>
+                            <p class="text-sm text-gray-500 mt-1">Tổng đơn hàng</p>
+                        </div>
+                    </div>
+                    <div class="stat-icon bg-gradient-orange">
+                        <i class="fas fa-shopping-cart text-xl"></i>
                     </div>
                 </div>
             </div>
@@ -475,6 +519,97 @@ $viewed_products = get_productView(6);
                             <?php endif; ?>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Orders Section -->
+        <div class="mx-8 mb-8">
+            <div class="card">
+                <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                    <h4 class="text-lg font-semibold text-gray-900">Đơn hàng gần đây</h4>
+                    <a href="admin.php?mod=order&act=list" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                        Xem tất cả <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã ĐH</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Khách hàng</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày đặt</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng tiền</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <?php if(!empty($recent_orders)): ?>
+                                <?php foreach($recent_orders as $order): ?>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">#<?= $order['mahd'] ?></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900"><?= htmlspecialchars($order['hoten']) ?></div>
+                                        <div class="text-sm text-gray-500"><?= htmlspecialchars($order['email']) ?></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <?= date('d/m/Y', strtotime($order['ngaydathang'])) ?>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        <?= number_format($order['tongtien'] * 1000) ?>đ
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <?php
+                                        $status_class = '';
+                                        $status_text = '';
+                                        switch($order['trangthai']) {
+                                            case 'gio-hang':
+                                                $status_class = 'bg-gray-100 text-gray-800';
+                                                $status_text = 'Giỏ hàng';
+                                                break;
+                                            case 'chuan-bi-don-hang':
+                                                $status_class = 'bg-yellow-100 text-yellow-800';
+                                                $status_text = 'Chuẩn bị';
+                                                break;
+                                            case 'dang-giao-hang':
+                                                $status_class = 'bg-blue-100 text-blue-800';
+                                                $status_text = 'Đang giao';
+                                                break;
+                                            case 'da-giao':
+                                                $status_class = 'bg-green-100 text-green-800';
+                                                $status_text = 'Hoàn thành';
+                                                break;
+                                            default:
+                                                $status_class = 'bg-gray-100 text-gray-800';
+                                                $status_text = $order['trangthai'];
+                                        }
+                                        ?>
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full <?= $status_class ?>">
+                                            <?= $status_text ?>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="admin.php?mod=order&act=detail&id=<?= $order['mahd'] ?>" 
+                                           class="text-indigo-600 hover:text-indigo-900">
+                                            Xem chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                        <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4 block"></i>
+                                        <p>Chưa có đơn hàng nào</p>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

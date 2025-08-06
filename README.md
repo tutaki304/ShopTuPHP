@@ -36,9 +36,9 @@ ShopTu là một hệ thống thương mại điện tử hoàn chỉnh được
 - **Trang thông tin**: Giới thiệu, liên hệ
 
 ### Phía quản trị:
-- **Dashboard**: Thống kê tổng quan, biểu đồ doanh thu
+- **Dashboard**: Thống kê tổng quan, biểu đồ doanh thu, đơn hàng gần đây
 - **Quản lý sản phẩm**: CRUD sản phẩm, upload hình ảnh, quản lý kho
-- **Quản lý đơn hàng**: Xem, cập nhật trạng thái đơn hàng, thống kê
+- **Quản lý đơn hàng**: Xem, cập nhật trạng thái đơn hàng, thống kê doanh thu, top khách hàng
 - **Quản lý người dùng**: Quản lý tài khoản khách hàng và admin
 - **Quản lý danh mục**: Tổ chức sản phẩm theo danh mục
 - **Quản lý bình luận**: Duyệt và xóa bình luận
@@ -454,6 +454,10 @@ GET  /admin.php?mod=page&act=dashboard   # Dashboard admin
 GET  /admin.php?mod=product&act=admin    # Quản lý sản phẩm
 POST /admin.php?mod=product&act=add      # Thêm sản phẩm
 POST /admin.php?mod=product&act=edit     # Sửa sản phẩm
+GET  /admin.php?mod=order&act=list       # Danh sách đơn hàng
+GET  /admin.php?mod=order&act=detail&id=123  # Chi tiết đơn hàng
+POST /admin.php?mod=order&act=update_status  # Cập nhật trạng thái
+GET  /admin.php?mod=order&act=statistics # Thống kê đơn hàng
 GET  /admin.php?mod=user&act=admin       # Quản lý người dùng
 ```
 

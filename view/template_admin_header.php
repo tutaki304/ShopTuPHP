@@ -44,6 +44,9 @@
                     <a href="admin.php?mod=product&act=admin_danhmuc"><i class="fa-solid fa-layer-group"></i> Danh mục</a>
                 </li>
                 <li>
+                    <a href="admin.php?mod=order&act=list"><i class="fa-solid fa-shopping-cart"></i> Đơn hàng</a>
+                </li>
+                <li>
                     <a href="admin.php?mod=user&act=user"><i class="fa-solid fa-user"></i> Tài khoản</a>
                 </li>
                 <li>

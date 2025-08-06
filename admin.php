@@ -12,6 +12,9 @@
             case 'product':
                 include_once 'controller/product.php';
                     break;
+            case 'order':
+                include_once 'controller/order.php';
+                    break;
             default:
                 # code...
                 break;
