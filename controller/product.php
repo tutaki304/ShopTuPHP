@@ -271,7 +271,11 @@ if ($_GET['act']) {
                 $tongtien = $_POST['tongtien'];
                 $ghichu = $_POST['ghichu'];
                 $trangthai = 'chuan-bi-don-hang';
-                get_updateCart($giohang['mahd'], $makh, $ngaydathang, $tongtien, $ghichu, $trangthai);
+                
+                // Lấy địa chỉ giao hàng đầy đủ từ form
+                $diachi_giaohang = build_delivery_address($_POST);
+                
+                get_updateCart($giohang['mahd'], $makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $diachi_giaohang);
                 
                 // Lưu thông tin đơn hàng để hiển thị trong trang success
                 $_SESSION['order_info'] = [

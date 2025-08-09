@@ -198,4 +198,28 @@ function fix_all_order_totals() {
             WHERE hd.tongtien = 0 OR hd.tongtien IS NULL";
     return pdo_execute($sql);
 }
+
+// Lấy đơn hàng của user cụ thể
+function get_user_orders($makh) {
+    $sql = "SELECT hd.*, 
+            CASE 
+                WHEN hd.tongtien > 0 THEN hd.tongtien
+                ELSE (
+                    SELECT COALESCE(SUM(ct.soluong * 
+                        CASE 
+                            WHEN ct.dongia > 0 THEN ct.dongia
+                            WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
+                            ELSE sp.dongia
+                        END
+                    ) * 1000, 0) 
+                    FROM chitiethoadon ct 
+                    INNER JOIN sanpham sp ON ct.masp = sp.masp
+                    WHERE ct.mahd = hd.mahd
+                )
+            END as calculated_total
+            FROM hoadon hd 
+            WHERE hd.makh = ?
+            ORDER BY hd.ngaydathang DESC";
+    return pdo_query($sql, $makh);
+}
 ?>

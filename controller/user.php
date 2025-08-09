@@ -294,6 +294,53 @@
                 include_once 'view/page_profile.php';
                 include_once 'view/template_footer.php';
                 break;
+                
+            case 'orders':
+                // Xem đơn hàng đã đặt
+                if (!isset($_SESSION['user'])) {
+                    header('Location: ?mod=user&act=login');
+                    exit();
+                }
+                include_once 'model/orders.php';
+                
+                // Lấy danh sách đơn hàng của user
+                $user_orders = get_user_orders($_SESSION['user']['makh']);
+                
+                include_once 'view/template_head.php';
+                include_once 'view/template_header.php';
+                include_once 'view/page_user_orders.php';
+                include_once 'view/template_footer.php';
+                break;
+                
+            case 'order_detail':
+                // Xem chi tiết đơn hàng
+                if (!isset($_SESSION['user'])) {
+                    header('Location: ?mod=user&act=login');
+                    exit();
+                }
+                
+                if (isset($_GET['id'])) {
+                    include_once 'model/orders.php';
+                    $mahd = $_GET['id'];
+                    $order = get_order_by_id($mahd);
+                    
+                    // Kiểm tra quyền xem đơn hàng (chỉ được xem đơn hàng của mình)
+                    if ($order && $order['makh'] == $_SESSION['user']['makh']) {
+                        $order_details = get_order_details($mahd);
+                        
+                        include_once 'view/template_head.php';
+                        include_once 'view/template_header.php';
+                        include_once 'view/page_user_order_detail.php';
+                        include_once 'view/template_footer.php';
+                    } else {
+                        $_SESSION['error'] = "Bạn không có quyền xem đơn hàng này!";
+                        header('Location: ?mod=user&act=orders');
+                    }
+                } else {
+                    header('Location: ?mod=user&act=orders');
+                }
+                break;
+                
             default:
                 # 404 - trang web không tồn tại!
                 break;

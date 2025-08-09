@@ -167,6 +167,9 @@
                             <a href="?mod=user&act=profile" class="dropdown-item">
                                 <i class="fas fa-user"></i> Thông tin cá nhân
                             </a>
+                            <a href="?mod=user&act=orders" class="dropdown-item">
+                                <i class="fas fa-shopping-bag"></i> Đơn hàng của tôi
+                            </a>
                             <a href="?mod=user&act=edit_profile" class="dropdown-item">
                                 <i class="fas fa-user-edit"></i> Chỉnh sửa thông tin
                             </a>

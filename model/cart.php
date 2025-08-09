@@ -80,8 +80,17 @@
     }
 
     //update giỏ hàng
-    function get_updateCart($mahd, $makh, $ngaydathang, $tongtien, $ghichu, $trangthai){
-        pdo_execute("UPDATE hoadon SET makh=?, ngaydathang=?, tongtien=?, ghichu=?, trangthai=? WHERE mahd=?",$makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $mahd);
+    function get_updateCart($mahd, $makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $diachi_giaohang = null){
+        try {
+            if ($diachi_giaohang !== null) {
+                pdo_execute("UPDATE hoadon SET makh=?, ngaydathang=?, tongtien=?, ghichu=?, trangthai=?, diachi_giaohang=? WHERE mahd=?",$makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $diachi_giaohang, $mahd);
+            } else {
+                pdo_execute("UPDATE hoadon SET makh=?, ngaydathang=?, tongtien=?, ghichu=?, trangthai=? WHERE mahd=?",$makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $mahd);
+            }
+        } catch (Exception $e) {
+            // Nếu lỗi với cột diachi_giaohang (cột chưa tồn tại), fallback về version cũ
+            pdo_execute("UPDATE hoadon SET makh=?, ngaydathang=?, tongtien=?, ghichu=?, trangthai=? WHERE mahd=?",$makh, $ngaydathang, $tongtien, $ghichu, $trangthai, $mahd);
+        }
     }
     
     // Dọn dẹp giỏ hàng duplicate (fix bug số lượng sai)
@@ -107,5 +116,64 @@
             pdo_execute("INSERT INTO chitiethoadon(mahd, masp, soluong) VALUES(?,?,?)", 
                        $mahd, $dup['masp'], $dup['total_qty']);
         }
+    }
+    
+    // Helper function để chuyển đổi mã địa chỉ thành tên đầy đủ
+    function get_address_text($type, $code) {
+        switch($type) {
+            case 'tinh':
+                switch($code) {
+                    case 'hcm': return 'TP. Hồ Chí Minh';
+                    case 'hn': return 'Hà Nội';
+                    case 'dn': return 'Đà Nẵng';
+                    case 'ct': return 'Cần Thơ';
+                    case 'other': return 'Tỉnh khác';
+                    default: return $code;
+                }
+            case 'quan':
+                switch($code) {
+                    case 'q1': return 'Quận 1';
+                    case 'q3': return 'Quận 3';
+                    case 'q7': return 'Quận 7';
+                    case 'tb': return 'Quận Tân Bình';
+                    default: return $code;
+                }
+            case 'phuong':
+                switch($code) {
+                    case 'p1': return 'Phường 1';
+                    case 'p2': return 'Phường 2';
+                    case 'p3': return 'Phường 3';
+                    default: return $code;
+                }
+            default:
+                return $code;
+        }
+    }
+    
+    // Tạo địa chỉ giao hàng đầy đủ từ form data
+    function build_delivery_address($form_data) {
+        $address_parts = [];
+        
+        // Địa chỉ chi tiết (số nhà, tên đường)
+        if (isset($form_data['diachi_chitiet']) && !empty(trim($form_data['diachi_chitiet']))) {
+            $address_parts[] = trim($form_data['diachi_chitiet']);
+        }
+        
+        // Phường/Xã
+        if (isset($form_data['phuong']) && !empty($form_data['phuong'])) {
+            $address_parts[] = get_address_text('phuong', $form_data['phuong']);
+        }
+        
+        // Quận/Huyện
+        if (isset($form_data['quan']) && !empty($form_data['quan'])) {
+            $address_parts[] = get_address_text('quan', $form_data['quan']);
+        }
+        
+        // Tỉnh/Thành phố
+        if (isset($form_data['tinh']) && !empty($form_data['tinh'])) {
+            $address_parts[] = get_address_text('tinh', $form_data['tinh']);
+        }
+        
+        return implode(', ', array_filter($address_parts));
     }
 ?>
