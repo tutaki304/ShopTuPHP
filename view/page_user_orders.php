@@ -47,7 +47,7 @@
     }
     
     .order-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #6c757d, #495057);
         color: white;
         padding: 20px;
         display: flex;
@@ -85,7 +85,7 @@
     .info-icon {
         width: 20px;
         height: 20px;
-        color: #667eea;
+        color: #6c757d;
     }
     
     .info-label {

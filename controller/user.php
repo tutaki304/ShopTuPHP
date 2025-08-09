@@ -79,17 +79,55 @@
                 include_once 'model/user.php';
                 if(isset($_POST['submit'])){
                     $hoten = trim($_POST['hoten']);
-                    $anh = !empty($_POST['anh']) ? $_POST['anh'] : 'upload/avatar/default.png';
                     $email = trim($_POST['email']);
                     $diachi = trim($_POST['diachi']);
                     $sdt = trim($_POST['sdt']);
                     $matkhau = !empty($_POST['matkhau']) ? $_POST['matkhau'] : '12345';
                     $quyen = $_POST['quyen'];
                     
+                    // Xử lý ảnh đại diện
+                    $anh = 'assets_user/img/default-avatar.png'; // Ảnh mặc định
+                    
+                    // Kiểm tra upload file
+                    if(isset($_FILES['anh']) && $_FILES['anh']['error'] == 0) {
+                        $upload_dir = 'upload/avatar/';
+                        if (!file_exists($upload_dir)) {
+                            mkdir($upload_dir, 0777, true);
+                        }
+                        
+                        $file_name = $_FILES['anh']['name'];
+                        $file_tmp = $_FILES['anh']['tmp_name'];
+                        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                        
+                        // Kiểm tra định dạng file
+                        $allowed_exts = ['jpg', 'jpeg', 'png', 'gif'];
+                        if(in_array($file_ext, $allowed_exts)) {
+                            // Kiểm tra kích thước file (5MB)
+                            if($_FILES['anh']['size'] <= 5 * 1024 * 1024) {
+                                $new_file_name = 'avatar_' . time() . '_' . uniqid() . '.' . $file_ext;
+                                $upload_path = $upload_dir . $new_file_name;
+                                
+                                if(move_uploaded_file($file_tmp, $upload_path)) {
+                                    $anh = $upload_path;
+                                } else {
+                                    $_SESSION['loi'] = 'Không thể tải lên ảnh!';
+                                }
+                            } else {
+                                $_SESSION['loi'] = 'Kích thước ảnh quá lớn! Tối đa 5MB.';
+                            }
+                        } else {
+                            $_SESSION['loi'] = 'Chỉ chấp nhận file ảnh JPG, PNG, GIF!';
+                        }
+                    } 
+                    // Kiểm tra link ảnh
+                    else if(!empty($_POST['anh_link'])) {
+                        $anh = trim($_POST['anh_link']);
+                    }
+                    
                     // Validate dữ liệu
                     if(empty($hoten) || empty($email) || empty($sdt) || empty($quyen)) {
                         $_SESSION['loi'] = 'Vui lòng điền đầy đủ thông tin bắt buộc!';
-                    } else {
+                    } else if(!isset($_SESSION['loi'])) { // Chỉ kiểm tra nếu không có lỗi upload
                         // Kiểm tra email đã tồn tại
                         $check_email = user_checkEmail($email);
                         if($check_email) {
@@ -124,21 +162,68 @@
                 include_once 'model/user.php';
                 $makh = $_GET['id'];
                 if(isset($_POST['submit-user'])){
-                    $hoten= $_POST['hoten'];
-                    $anh = $_POST['anh'];
-                    $email= $_POST['email'];
-                    $diachi= $_POST['diachi'];
-                    $sdt= $_POST['sdt'];
-                    $matkhau= $_POST['matkhau'];
-                    $quyen= $_POST['quyen'];
-                    $kq = user_checkPhone($sdt);
-                    if($kq && $kq['makh']!=$makh){//đúng /bị trùng /khong sửa 
-                        //$kq['makh']!=$makh dc sửa trùng sdt của mình ko dc trùng vs sdt ng khác
-                        $_SESSION['loi']='Đã tồn tại số điện thoại <strong>'.$sdt.'</strong>';
+                    $hoten = trim($_POST['hoten']);
+                    $email = trim($_POST['email']);
+                    $diachi = trim($_POST['diachi']);
+                    $sdt = trim($_POST['sdt']);
+                    $matkhau = $_POST['matkhau'];
+                    $quyen = $_POST['quyen'];
+                    
+                    // Lấy thông tin tài khoản hiện tại
+                    $current_user = get_taikhoan($makh);
+                    $anh = $current_user['anh']; // Mặc định giữ ảnh cũ
+                    
+                    // Xử lý ảnh đại diện
+                    if(isset($_FILES['anh']) && $_FILES['anh']['error'] == 0) {
+                        // Upload file mới
+                        $upload_dir = 'upload/avatar/';
+                        if (!file_exists($upload_dir)) {
+                            mkdir($upload_dir, 0777, true);
+                        }
+                        
+                        $file_name = $_FILES['anh']['name'];
+                        $file_tmp = $_FILES['anh']['tmp_name'];
+                        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                        
+                        // Kiểm tra định dạng file
+                        $allowed_exts = ['jpg', 'jpeg', 'png', 'gif'];
+                        if(in_array($file_ext, $allowed_exts)) {
+                            // Kiểm tra kích thước file (5MB)
+                            if($_FILES['anh']['size'] <= 5 * 1024 * 1024) {
+                                $new_file_name = 'avatar_' . time() . '_' . uniqid() . '.' . $file_ext;
+                                $upload_path = $upload_dir . $new_file_name;
+                                
+                                if(move_uploaded_file($file_tmp, $upload_path)) {
+                                    // Xóa ảnh cũ nếu không phải ảnh mặc định
+                                    if($current_user['anh'] && !strpos($current_user['anh'], 'default') && file_exists($current_user['anh'])) {
+                                        unlink($current_user['anh']);
+                                    }
+                                    $anh = $upload_path;
+                                } else {
+                                    $_SESSION['loi'] = 'Không thể tải lên ảnh mới!';
+                                }
+                            } else {
+                                $_SESSION['loi'] = 'Kích thước ảnh quá lớn! Tối đa 5MB.';
+                            }
+                        } else {
+                            $_SESSION['loi'] = 'Chỉ chấp nhận file ảnh JPG, PNG, GIF!';
+                        }
+                    } 
+                    // Kiểm tra link ảnh mới
+                    else if(!empty($_POST['anh_link'])) {
+                        $anh = trim($_POST['anh_link']);
+                    }
+                    // Nếu không có lỗi, tiếp tục validate và cập nhật
+                    if(!isset($_SESSION['loi'])) {
+                        $kq = user_checkPhone($sdt);
+                        if($kq && $kq['makh']!=$makh){//đúng /bị trùng /khong sửa 
+                            //$kq['makh']!=$makh dc sửa trùng sdt của mình ko dc trùng vs sdt ng khác
+                            $_SESSION['loi']='Đã tồn tại số điện thoại <strong>'.$sdt.'</strong>';
                         } else{//đúng /bị trùng / sửa
                             edit_user($makh, $hoten, $anh, $email, $diachi, $sdt, $matkhau, $quyen);
                             $_SESSION['thongbao']='Đã lưu thông tin thay đổi';
                         }
+                    }
 
                 }
                 $tk = get_taikhoan($makh);
@@ -151,7 +236,13 @@
             case 'delete_user':
                include_once 'model/user.php';
                include_once 'model/connect.php';
-               delete_user($_GET['id']);
+               $result = delete_user($_GET['id']);
+               if ($result === false) {
+                   // Thông báo lỗi nếu cố gắng xóa admin
+                   $_SESSION['error_message'] = "Không thể xóa tài khoản Admin!";
+               } else {
+                   $_SESSION['success_message'] = "Đã xóa tài khoản thành công!";
+               }
                header('Location: admin.php?mod=user&act=user');
             break;
             

@@ -28,7 +28,7 @@ nav {
     height: 60px;
     display: flex;
     justify-content: space-between;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
     color: white;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: relative;
@@ -78,7 +78,7 @@ nav strong:hover {
 }
 
 .col-3::-webkit-scrollbar-thumb {
-    background: #667eea;
+    background: #6c757d;
     border-radius: 3px;
 }
 
@@ -110,7 +110,7 @@ nav strong:hover {
 }
 
 .col-3 ul li:hover a {
-    color: #667eea;
+    color: #6c757d;
 }
 /* Optimized Main Content */
 .col-9 {
@@ -130,7 +130,7 @@ nav strong:hover {
 }
 
 .col-9::-webkit-scrollbar-thumb {
-    background: #667eea;
+    background: #6c757d;
     border-radius: 4px;
 }
 
@@ -156,7 +156,7 @@ nav strong:hover {
     font-weight: 600;
     border-radius: 8px;
     color: white;
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: linear-gradient(45deg, #6c757d, #495057);
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     transition: all 0.3s ease;
     text-transform: uppercase;
@@ -190,7 +190,7 @@ nav strong:hover {
 
 .anhsanpham img:hover {
     transform: scale(1.1);
-    border-color: #667eea;
+    border-color: #6c757d;
 }
 
 .anhtaikhoan {
@@ -210,7 +210,7 @@ nav strong:hover {
 
 .anhtaikhoan img:hover {
     transform: scale(1.1);
-    border-color: #667eea;
+    border-color: #6c757d;
 }
 
 /* Enhanced Table */
@@ -225,7 +225,7 @@ table {
 }
 
 thead {
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: linear-gradient(45deg, #6c757d, #495057);
     color: white;
 }
 
@@ -425,7 +425,7 @@ button {
 }
 
 .khungadmin-item:hover {
-    background: linear-gradient(45deg, #667eea, #764ba2);
+    background: linear-gradient(45deg, #6c757d, #495057);
     color: white;
     transform: translateX(5px);
 }

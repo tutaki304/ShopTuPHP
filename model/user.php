@@ -43,7 +43,14 @@
     }
     //xoá tài khoản
     function delete_user($makh){
+        // Kiểm tra quyền của user trước khi xóa
+        $user = get_taikhoan($makh);
+        if ($user && isset($user['quyen']) && $user['quyen'] == 'admin') {
+            // Không cho phép xóa tài khoản admin
+            return false;
+        }
         pdo_execute("DELETE FROM taikhoan WHERE makh=?",$makh);
+        return true;
     }
     // hiển thị tất cả tk
     function getAllAccounts(){

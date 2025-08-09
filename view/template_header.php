@@ -96,7 +96,7 @@
 
         .dropdown-item:hover {
             background-color: #f8f9fa;
-            color: #667eea;
+            color: #6c757d;
         }
 
         .dropdown-item.logout:hover {

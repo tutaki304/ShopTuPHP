@@ -43,7 +43,7 @@
     }
     
     .items-header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #6c757d, #495057);
         color: white;
         padding: 20px;
         border-radius: 12px 12px 0 0;

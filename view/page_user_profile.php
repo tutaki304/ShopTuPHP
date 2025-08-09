@@ -164,7 +164,7 @@
 <style>
 .user-profile-container {
     min-height: 80vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
     padding: 40px 20px;
 }
 
@@ -178,7 +178,7 @@
 }
 
 .profile-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
     padding: 40px;
     display: flex;
     align-items: center;
@@ -286,7 +286,7 @@
 }
 
 .detail-section h3 i {
-    color: #667eea;
+    color: #6c757d;
 }
 
 .detail-grid {
@@ -352,12 +352,12 @@
     align-items: center;
     gap: 12px;
     padding: 15px 20px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #6c757d, #495057);
     color: white;
     text-decoration: none;
     border-radius: 12px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
 }
 
 .admin-btn:hover {
@@ -386,7 +386,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #6c757d, #495057);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -433,8 +433,8 @@
 }
 
 .quick-action:hover {
-    border-color: #667eea;
-    color: #667eea;
+    border-color: #6c757d;
+    color: #6c757d;
     transform: translateY(-2px);
 }
 

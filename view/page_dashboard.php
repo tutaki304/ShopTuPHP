@@ -704,7 +704,7 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
     
     /* CSS cho container chính của dashboard */
     .dashboard-admin {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Nền gradient tím/xanh */
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%); /* Nền gradient xám */
         min-height: 100vh;                      /* Chiều cao tối thiểu full màn hình */
         padding: 20px;                          /* Khoảng cách trong 20px */
         margin: -20px;                          /* Margin âm để full width */
@@ -725,7 +725,7 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
     .dashboard-title {
         font-size: 2.5rem;                      /* Cỡ chữ 40px */
         font-weight: 700;                       /* Độ đậm chữ bold */
-        background: linear-gradient(45deg, #667eea, #764ba2); /* Gradient cho chữ */
+        background: linear-gradient(45deg, #6c757d, #495057); /* Gradient cho chữ */
         -webkit-background-clip: text;          /* Clip gradient theo text (Webkit) */
         background-clip: text;                  /* Clip gradient theo text */
         -webkit-text-fill-color: transparent;   /* Làm chữ trong suốt để hiện gradient */
@@ -865,7 +865,7 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
 
     /* CSS cho từng nút thao tác */
     .action-btn {
-        background: linear-gradient(45deg, #667eea, #764ba2); /* Gradient tím/xanh */
+        background: linear-gradient(45deg, #6c757d, #495057); /* Gradient xám */
         color: white;                                   /* Chữ trắng */
         padding: 20px;                                  /* Khoảng cách trong 20px */
         border-radius: 15px;                            /* Bo góc 15px */

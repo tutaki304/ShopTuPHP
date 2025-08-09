@@ -98,7 +98,7 @@
     }
     
     .items-table thead {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #6c757d, #495057);
         color: white;
     }
     

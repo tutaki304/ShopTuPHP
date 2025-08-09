@@ -42,7 +42,7 @@ if (!isset($ds_binhluan)) {
         width: 35px;
         height: 35px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -78,7 +78,7 @@ if (!isset($ds_binhluan)) {
         padding: 20px;
         border-radius: 12px;
         margin-bottom: 20px;
-        border-left: 4px solid #667eea;
+        border-left: 4px solid #6c757d;
         box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
 
@@ -112,7 +112,7 @@ if (!isset($ds_binhluan)) {
     .stat-number {
         font-size: 28px;
         font-weight: 700;
-        color: #667eea;
+        color: #6c757d;
         display: block;
     }
 
@@ -208,7 +208,7 @@ if (!isset($ds_binhluan)) {
     }
 
     #comment-table thead {
-        background: linear-gradient(45deg, #667eea, #764ba2);
+        background: linear-gradient(45deg, #6c757d, #495057);
     }
 
     #comment-table thead th {
