@@ -19,7 +19,7 @@ function calculate_order_total($mahd) {
                     WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
                     ELSE sp.dongia
                 END
-            ) as total 
+            ) * 1000 as total 
             FROM chitiethoadon ct
             INNER JOIN sanpham sp ON ct.masp = sp.masp
             WHERE ct.mahd = ?";
@@ -39,7 +39,7 @@ function get_all_orders_with_calculated_total() {
                             WHEN sp.khuyenmai > 0 THEN sp.khuyenmai  
                             ELSE sp.dongia
                         END
-                    ), 0) 
+                    ) * 1000, 0) 
                     FROM chitiethoadon ct 
                     INNER JOIN sanpham sp ON ct.masp = sp.masp
                     WHERE ct.mahd = hd.mahd

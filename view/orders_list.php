@@ -384,7 +384,7 @@
                     <td><?= htmlspecialchars($order['email']) ?></td>
                     <td><?= htmlspecialchars($order['sdt']) ?></td>
                     <td><?= date('d/m/Y', strtotime($order['ngaydathang'])) ?></td>
-                    <td><strong><?= number_format((isset($order['calculated_total']) ? $order['calculated_total'] : $order['tongtien']) * 1000) ?>đ</strong></td>
+                    <td><strong><?= number_format(isset($order['calculated_total']) ? $order['calculated_total'] : $order['tongtien']) ?>đ</strong></td>
                     <td>
                         <span class="status-badge status-<?= $order['trangthai'] ?>">
                             <?php

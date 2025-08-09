@@ -372,7 +372,7 @@
             
             <div class="info-row">
                 <span class="info-label">Tổng tiền:</span>
-                <span class="info-value"><strong><?= number_format($order['tongtien'] * 1000) ?>đ</strong></span>
+                <span class="info-value"><strong><?= number_format($order['tongtien']) ?>đ</strong></span>
             </div>
             
             <div class="info-row">
