@@ -54,11 +54,14 @@ if (isset($_GET['act'])) {
                 } else {
                     $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật trạng thái!";
                 }
-            }
-            
-            if (isset($_GET['redirect'])) {
-                header('Location: admin.php?mod=order&act=detail&id=' . $mahd);
+                
+                if (isset($_POST['redirect'])) {
+                    header('Location: admin.php?mod=order&act=detail&id=' . $mahd);
+                } else {
+                    header('Location: admin.php?mod=order&act=list');
+                }
             } else {
+                $_SESSION['error'] = "Thiếu thông tin cần thiết để cập nhật trạng thái!";
                 header('Location: admin.php?mod=order&act=list');
             }
             break;

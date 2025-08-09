@@ -76,8 +76,13 @@ function get_order_details($mahd) {
 
 // Cập nhật trạng thái đơn hàng
 function update_order_status($mahd, $trangthai) {
-    $sql = "UPDATE hoadon SET trangthai = ?, ngaycapnhat = NOW() WHERE mahd = ?";
-    return pdo_execute($sql, $trangthai, $mahd);
+    try {
+        $sql = "UPDATE hoadon SET trangthai = ?, ngaycapnhat = NOW() WHERE mahd = ?";
+        pdo_execute($sql, $trangthai, $mahd);
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
 }
 
 // Xóa đơn hàng
