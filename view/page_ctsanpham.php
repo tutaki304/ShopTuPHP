@@ -15,7 +15,6 @@
                     <div class="product-content-left-small-img">
                         <img src="upload/product/<?=$ctsanpham['anh']?>" alt="#">
                         <img src="upload/product/<?=$ctsanpham['anh']?>" alt="#">
-                        <img src="assets_user/img/anhnu8.webp" alt="#">
                     </div>  
                 </div>
                 <div class="product-content-right">

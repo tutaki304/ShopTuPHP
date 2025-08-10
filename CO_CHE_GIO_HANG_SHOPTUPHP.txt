@@ -1,0 +1,243 @@
+================================================================
+                    CƠ CHẾ GIỎ HÀNG THÔNG MINH TRONG SHOPTUPHP
+================================================================
+
+🛒 KHÔNG CÓ BẢNG "GIOHANG" RIÊNG - DÙNG BẢNG "HOADON"!
+=======================================================
+
+Hệ thống sử dụng kỹ thuật rất thông minh để quản lý giỏ hàng:
+
+📋 CẤU TRÚC DATABASE
+====================
+
+-- BẢNG HOADON (Đóng vai trò cả Order và Cart)
+CREATE TABLE `hoadon` (
+  `mahd` int(11) NOT NULL AUTO_INCREMENT,
+  `makh` int(11) NOT NULL,           -- ID khách hàng
+  `ngaydathang` datetime DEFAULT NULL,
+  `tongtien` int(11) DEFAULT NULL,
+  `ghichu` text,
+  `trangthai` varchar(50) DEFAULT NULL,  -- KEY POINT: 'gio-hang' hoặc 'da-thanh-toan'
+  PRIMARY KEY (`mahd`)
+);
+
+-- BẢNG CHITIETHOADON (Chi tiết sản phẩm trong giỏ hàng/đơn hàng)
+CREATE TABLE `chitiethoadon` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mahd` int(11) NOT NULL,           -- ID hóa đơn (liên kết với hoadon)
+  `masp` int(11) NOT NULL,           -- ID sản phẩm
+  `soluong` int(11) NOT NULL,        -- Số lượng sản phẩm
+  PRIMARY KEY (`id`)
+);
+
+🎯 LOGIC HOẠT ĐỘNG
+==================
+
+1. 🛒 GIỎ HÀNG = HOADON với `trangthai = 'gio-hang'`
+--------------------------------------------------
+
+// Kiểm tra có giỏ hàng chưa
+function get_hasCart($makh){
+    return pdo_query_one("SELECT * FROM hoadon WHERE makh=? AND trangthai=?", 
+                         $makh, 'gio-hang');
+}
+
+2. 📦 SẢN PHẨM TRONG GIỎ = CHITIETHOADON
+---------------------------------------
+
+// Hiển thị giỏ hàng
+function get_Cart($makh){
+    return pdo_query("SELECT hd.mahd, ct.soluong, sp.masp, sp.tensp, sp.anh, sp.dongia 
+                     FROM hoadon hd 
+                     INNER JOIN chitiethoadon ct ON hd.mahd = ct.mahd 
+                     INNER JOIN sanpham sp ON ct.masp = sp.masp 
+                     WHERE hd.makh=? AND hd.trangthai=?", $makh, 'gio-hang');
+}
+
+3. ➕ THÊM VÀO GIỎ HÀNG
+-----------------------
+
+// Flow thêm sản phẩm vào giỏ hàng
+if (isset($_SESSION['user'])) {
+    $makh = $_SESSION['user']['makh'];
+    
+    // 1. Kiểm tra có giỏ hàng chưa
+    $cart = get_hasCart($makh);
+    
+    if ($cart) {
+        // 2. Có rồi → Thêm sản phẩm vào chitiethoadon
+        get_addToCart($cart['mahd'], $masp);
+    } else {
+        // 3. Chưa có → Tạo mới hoadon với trangthai='gio-hang'
+        get_cartAdd($makh);
+        $new_cart = get_hasCart($makh);
+        get_addToCart($new_cart['mahd'], $masp);
+    }
+}
+
+4. 🔧 CÁC FUNCTIONS CHỦ ĐẠO
+---------------------------
+
+// Tạo giỏ hàng mới
+function get_cartAdd($makh){
+    pdo_execute("INSERT INTO hoadon(`makh`,`ngaydathang`,`tongtien`,`ghichu`,`trangthai`) 
+                VALUES(?,?,?,?,?)", $makh, date('Y-m-d H:i:s'), 0, '', 'gio-hang');
+}
+
+// Thêm sản phẩm vào giỏ hàng
+function get_addToCart($mahd, $masp, $soluong = 1){
+    // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
+    $existing = pdo_query_one("SELECT * FROM chitiethoadon WHERE mahd=? AND masp=?", $mahd, $masp);
+    
+    if($existing) {
+        // Nếu đã có, chỉ cộng thêm 1
+        $newQuantity = $existing['soluong'] + 1;
+        pdo_execute("UPDATE chitiethoadon SET soluong=? WHERE mahd=? AND masp=?", 
+                   $newQuantity, $mahd, $masp);
+    } else {
+        // Nếu chưa có, thêm mới với số lượng = 1
+        pdo_execute("INSERT INTO chitiethoadon(`mahd`,`masp`,`soluong`) VALUES(?,?,?)", 
+                   $mahd, $masp, 1);
+    }
+}
+
+// Cập nhật số lượng sản phẩm
+function get_updateCartQuantity($mahd, $masp, $soluong){
+    if($soluong <= 0) {
+        // Nếu số lượng <= 0, xóa sản phẩm khỏi giỏ hàng
+        get_removeFromCart($mahd, $masp);
+    } else {
+        pdo_execute("UPDATE chitiethoadon SET soluong=? WHERE mahd=? AND masp=?", 
+                   $soluong, $mahd, $masp);
+    }
+}
+
+// Lấy tổng số lượng sản phẩm trong giỏ hàng
+function get_cartTotalQuantity($makh){
+    $result = pdo_query_one("SELECT SUM(ct.soluong) as total FROM hoadon hd 
+                            INNER JOIN chitiethoadon ct ON hd.mahd = ct.mahd 
+                            WHERE hd.makh=? AND hd.trangthai=?", $makh, 'gio-hang');
+    return $result ? (int)$result['total'] : 0;
+}
+
+// Lấy tổng tiền giỏ hàng
+function get_cartTotalPrice($makh){
+    $result = pdo_query_one("SELECT SUM(ct.soluong * (sp.khuyenmai * 1000)) as total 
+                            FROM hoadon hd 
+                            INNER JOIN chitiethoadon ct ON hd.mahd = ct.mahd 
+                            INNER JOIN sanpham sp ON ct.masp = sp.masp
+                            WHERE hd.makh=? AND hd.trangthai=?", $makh, 'gio-hang');
+    return $result ? (int)$result['total'] : 0;
+}
+
+// Xoá sản phẩm khỏi giỏ hàng
+function get_removeFromCart($mahd, $masp){
+    pdo_execute("DELETE FROM chitiethoadon WHERE mahd=? AND masp=?",$mahd, $masp);
+}
+
+🔄 LUỒNG CHUYỂN TRẠNG THÁI
+=========================
+
+👤 User login → 🛒 Giỏ hàng → 💳 Thanh toán → 📦 Đơn hàng
+   
+   HOADON table:
+   trangthai = 'gio-hang'  →  trangthai = 'da-thanh-toan'
+
+// Khi thanh toán - chuyển từ giỏ hàng thành đơn hàng
+function checkout($mahd) {
+    pdo_execute("UPDATE hoadon SET trangthai='da-thanh-toan', ngaydathang=NOW() 
+                WHERE mahd=?", $mahd);
+}
+
+📊 DEMO THỰC TẾ
+===============
+
+-- User ID 1 có giỏ hàng
+SELECT * FROM hoadon WHERE makh=1 AND trangthai='gio-hang';
+-- Result: mahd=101, makh=1, trangthai='gio-hang'
+
+-- Sản phẩm trong giỏ hàng
+SELECT * FROM chitiethoadon WHERE mahd=101;
+-- Result: masp=5 (quantity=2), masp=8 (quantity=1)
+
+-- Khi thanh toán
+UPDATE hoadon SET trangthai='da-thanh-toan' WHERE mahd=101;
+-- Giỏ hàng thành đơn hàng!
+
+🧠 PHÂN TÍCH THIẾT KẾ
+====================
+
+✅ ƯU ĐIỂM:
+-----------
+1. **Tiết kiệm bảng**: Không cần tạo bảng giỏ hàng riêng
+2. **Logic thống nhất**: Giỏ hàng = đơn hàng chưa thanh toán
+3. **Dễ tracking**: Theo dõi toàn bộ lifecycle từ cart → order
+4. **Persistent cart**: Giỏ hàng không mất khi logout
+5. **Đơn giản hóa**: Cùng structure cho cart và order
+6. **Tiết kiệm storage**: Không duplicate data structure
+7. **Maintainable**: Dễ maintain vì logic tập trung
+
+❌ NHƯỢC ĐIỂM:
+--------------
+1. **Confusing**: Logic hơi phức tạp cho người mới
+2. **Mixed responsibility**: 1 bảng đảm nhận 2 vai trò
+3. **Query phức tạp**: Luôn phải filter theo trangthai
+4. **Performance**: Có thể chậm khi data lớn (cần index)
+5. **Scalability**: Khó scale khi có nhiều loại trạng thái
+
+🔍 CÁC TRẠNG THÁI TRONG HỆ THỐNG
+================================
+
+1. **'gio-hang'** - Giỏ hàng đang active
+2. **'da-thanh-toan'** - Đơn hàng đã thanh toán
+3. **'dang-xu-ly'** - Đơn hàng đang xử lý
+4. **'da-giao'** - Đã giao hàng
+5. **'da-huy'** - Đơn hàng bị hủy
+
+💡 PATTERN DESIGN TƯƠNG TỰ
+==========================
+
+Đây là pattern "State Machine" trong database design:
+- 1 entity có thể có nhiều states
+- State transition được control bởi business logic
+- Tiết kiệm được tables và relationships phức tạp
+
+🚀 CÁCH CẢI TIẾN
+================
+
+Nếu muốn cải tiến hệ thống này:
+
+1. **Thêm index cho performance:**
+   CREATE INDEX idx_hoadon_user_status ON hoadon(makh, trangthai);
+
+2. **Thêm validation logic:**
+   - Prevent multiple active carts per user
+   - Validate quantity before add to cart
+   - Check product availability
+
+3. **Thêm audit trail:**
+   - Log cart activities
+   - Track price changes
+   - Monitor abandoned carts
+
+4. **Optimize queries:**
+   - Use materialized views for complex calculations
+   - Cache total prices and quantities
+
+================================================================
+                            KẾT LUẬN
+================================================================
+
+Đây là một PATTERN THIẾT KẾ RẤT THÔNG MINH để tối ưu hóa database 
+structure trong dự án e-commerce nhỏ và trung bình. Mặc dù có một 
+số trade-offs, nhưng benefits vượt trội hơn drawbacks trong context 
+của ShopTuPHP.
+
+Kiến trúc này cho thấy sự hiểu biết sâu sắc về database design và 
+business logic optimization của developer.
+
+================================================================
+Tác giả: tutaki304
+Ngày tạo: August 10, 2025
+Project: ShopTuPHP E-commerce System
+================================================================
