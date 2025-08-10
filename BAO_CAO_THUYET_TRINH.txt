@@ -1,0 +1,879 @@
+================================================================
+                    BÁO CÁO THUYẾT TRÌNH DỰ ÁN SHOPTUPHP
+         HỆ THỐNG THƯƠNG MẠI ĐIỆN TỬ HOÀN CHỈNH
+================================================================
+
+🎯 TỔNG QUAN DỰ ÁN
+==================
+
+📌 Tên dự án: ShopTuPHP E-commerce System
+📌 Mục tiêu: Phát triển hệ thống thương mại điện tử hoàn chỉnh
+📌 Kiến trúc: MVC (Model-View-Controller) với Native PHP
+📌 Cơ sở dữ liệu: MySQL với PDO
+📌 Tính năng chính: Bán hàng online, quản trị viên, giỏ hàng, quản lý kho
+
+================================================================
+
+🏗️ KIẾN TRÚC HỆ THỐNG
+======================
+
+1. KIẾN TRÚC MVC
+   ┌─────────────────────────────────────────────────────────┐
+   │                    🌐 VIEW LAYER                        │
+   │  ┌─────────────────┐    ┌─────────────────────────────┐ │
+   │  │   Frontend UI   │    │     Admin Dashboard         │ │
+   │  │  (User Pages)   │    │    (Management Panel)      │ │
+   │  └─────────────────┘    └─────────────────────────────┘ │
+   └─────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+   ┌─────────────────────────────────────────────────────────┐
+   │                 🎮 CONTROLLER LAYER                     │
+   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐ │
+   │  │    Page     │  │   Product   │  │      User       │ │
+   │  │ Controller  │  │ Controller  │  │   Controller    │ │
+   │  └─────────────┘  └─────────────┘  └─────────────────┘ │
+   └─────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+   ┌─────────────────────────────────────────────────────────┐
+   │                  💾 MODEL LAYER                         │
+   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐ │
+   │  │  Products   │  │    User     │  │      Cart       │ │
+   │  │    Model    │  │    Model    │  │     Model       │ │
+   │  └─────────────┘  └─────────────┘  └─────────────────┘ │
+   └─────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+   ┌─────────────────────────────────────────────────────────┐
+   │                  🗄️ DATABASE LAYER                      │
+   │                    MySQL Database                       │
+   │     (sanpham, danhmuc, taikhoan, hoadon, etc.)         │
+   └─────────────────────────────────────────────────────────┘
+
+================================================================
+
+📁 CẤU TRÚC DỰ ÁN CHI TIẾT
+===========================
+
+ShopTuPHP/
+├── 📄 index.php                 # Entry point giao diện người dùng
+├── 📄 admin.php                 # Entry point giao diện admin
+├── 📄 global.php               # Cấu hình toàn cục
+├── 📄 shoptu.sql               # Database schema
+│
+├── 📁 controller/              # 🎮 Controllers (Business Logic)
+│   ├── 📄 page.php            # Page routing & trang chung
+│   ├── 📄 product.php         # Quản lý sản phẩm & danh mục
+│   ├── 📄 user.php            # Xác thực & quản lý user
+│   └── 📄 order.php           # Quản lý đơn hàng (NEW)
+│
+├── 📁 model/                   # 💾 Models (Data Layer)
+│   ├── 📄 connect.php         # Kết nối PDO Database
+│   ├── 📄 products.php        # CRUD sản phẩm
+│   ├── 📄 categories.php      # Quản lý danh mục
+│   ├── 📄 user.php            # Authentication & user data
+│   ├── 📄 cart.php            # Logic giỏ hàng
+│   ├── 📄 binhluan.php        # Hệ thống bình luận
+│   └── 📄 orders.php          # Xử lý đơn hàng (NEW)
+│
+├── 📁 view/                    # 🖼️ Views (Presentation)
+│   ├── 📄 template_*.php      # Layout templates
+│   ├── 📄 page_*.php          # Trang người dùng
+│   └── 📄 product_*.php       # Trang admin
+│
+├── 📁 assets_user/            # 🎨 Frontend Assets
+│   ├── 📁 css/               # CSS cho user
+│   ├── 📁 img/               # Hình ảnh giao diện
+│   └── 📁 js/                # JavaScript
+│
+├── 📁 assets_admin/           # 🎛️ Admin Assets
+│   ├── 📁 css/               # CSS cho admin
+│   └── 📁 img/               # Hình ảnh admin
+│
+└── 📁 upload/                 # 📤 File Upload
+    ├── 📁 product/           # Hình sản phẩm
+    └── 📁 avatar/            # Avatar user
+
+================================================================
+
+🔧 PHÂN TÍCH CODE CHI TIẾT
+==========================
+
+1. 🚀 ENTRY POINTS
+   
+   📄 index.php:
+   ```php
+   <?php
+   session_start();
+   include_once 'global.php';
+   
+   // Routing system với GET parameters
+   if (isset($_GET['mod'])) {
+       switch ($_GET['mod']) {
+           case 'page':     include_once 'controller/page.php'; break;
+           case 'user':     include_once 'controller/user.php'; break;
+           case 'product':  include_once 'controller/product.php'; break;
+           default:         header("Location: ?mod=page&act=home"); break;
+       }
+   }
+   ?>
+   ```
+   
+   📄 admin.php:
+   ```php
+   <?php
+   session_start();
+   
+   // Admin routing với bảo mật
+   if (isset($_GET['mod'])) {
+       switch ($_GET['mod']) {
+           case 'page':     include_once 'controller/page.php'; break;
+           case 'user':     include_once 'controller/user.php'; break;
+           case 'product':  include_once 'controller/product.php'; break;
+           case 'order':    include_once 'controller/order.php'; break;
+           default:         break;
+       }
+   } else {
+       header("Location: admin.php?mod=page&act=dashboard");
+   }
+   ?>
+   ```
+
+2. 💾 DATABASE CONNECTION (model/connect.php)
+   
+   ```php
+   <?php
+   // PDO Connection với error handling
+   function pdo_get_connection(){
+       $dburl = "mysql:host=localhost; dbname=shoptu;charset=utf8";
+       $username = 'root';
+       $password = '';
+       
+       $conn = new PDO($dburl, $username, $password);
+       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+       return $conn;
+   }
+   
+   // Execute function với prepared statements
+   function pdo_execute($sql){
+       $sql_args = array_slice(func_get_args(), 1);
+       try{
+           $conn = pdo_get_connection();
+           $stmt = $conn->prepare($sql);
+           $stmt->execute($sql_args);
+       } catch(PDOException $e){
+           throw $e;
+       } finally{
+           unset($conn);
+       }
+   }
+   
+   // Query function trả về mảng kết quả
+   function pdo_query($sql){
+       $sql_args = array_slice(func_get_args(), 1);
+       try{
+           $conn = pdo_get_connection();
+           $stmt = $conn->prepare($sql);
+           $stmt->execute($sql_args);
+           $rows = $stmt->fetchAll();
+           return $rows;
+       } catch(PDOException $e){
+           throw $e;
+       } finally{
+           unset($conn);
+       }
+   }
+   ?>
+   ```
+
+3. 🛍️ PRODUCT MODEL (model/products.php)
+   
+   ```php
+   <?php
+   // Lấy tất cả sản phẩm với JOIN danh mục
+   function get_products($madm=0,$start=0,$limit=0){
+       $sql = "SELECT s.*, d.tendm FROM sanpham s 
+               INNER JOIN danhmuc d ON s.madm = d.madm";
+       
+       // Filter theo danh mục
+       if($madm!=0){
+           $sql .= " WHERE s.madm=".$madm;
+       }
+       
+       // Pagination
+       if ($limit!=0) {
+           $sql .= " LIMIT ".$start.",".$limit;
+       }
+       
+       $conn = pdo_get_connection();
+       $stmt = $conn->prepare($sql);
+       $stmt->execute();
+       return $stmt->fetchAll();
+   }
+   
+   // Thêm sản phẩm với inventory tracking
+   function add_product($tensp,$dongia,$khuyenmai,$soluong,$mota,$anh,$madm){
+       $sql = "INSERT INTO sanpham 
+               (`tensp`,`dongia`,`khuyenmai`,`soluong`,`mota`,`anh`,`madm`) 
+               VALUES (:tensp, :dongia, :khuyenmai, :soluong, :mota, :anh, :madm)";
+       
+       $conn = pdo_get_connection();
+       $stmt = $conn->prepare($sql);
+       $stmt->bindParam(":tensp", $tensp);
+       $stmt->bindParam(":dongia", $dongia);
+       $stmt->bindParam(":khuyenmai", $khuyenmai);
+       $stmt->bindParam(":soluong", $soluong);
+       $stmt->bindParam(":mota", $mota);
+       $stmt->bindParam(":anh", $anh);
+       $stmt->bindParam(":madm", $madm);
+       return $stmt->execute();
+   }
+   
+   // Cập nhật số lượng tồn kho (INVENTORY MANAGEMENT)
+   function update_product_quantity($masp, $quantity_change, $reason = '') {
+       try {
+           $conn = pdo_get_connection();
+           $conn->beginTransaction();
+           
+           // Lấy số lượng hiện tại
+           $current = pdo_query_one("SELECT soluong FROM sanpham WHERE masp = ?", $masp);
+           $new_quantity = $current['soluong'] + $quantity_change;
+           
+           // Kiểm tra số lượng không âm
+           if ($new_quantity < 0) {
+               throw new Exception("Số lượng không đủ");
+           }
+           
+           // Cập nhật số lượng
+           pdo_execute("UPDATE sanpham SET soluong = ? WHERE masp = ?", 
+                      $new_quantity, $masp);
+           
+           // Ghi log thay đổi
+           pdo_execute("INSERT INTO stock_log (masp, quantity_change, reason) 
+                       VALUES (?, ?, ?)", $masp, $quantity_change, $reason);
+           
+           $conn->commit();
+           return true;
+       } catch (Exception $e) {
+           $conn->rollback();
+           throw $e;
+       }
+   }
+   ?>
+   ```
+
+4. 👤 USER AUTHENTICATION (model/user.php)
+   
+   ```php
+   <?php
+   // Login function với security
+   function login($email,$password){
+       $sql = "SELECT * FROM taikhoan WHERE email=? AND matkhau=?";
+       $conn = pdo_get_connection();
+       $stmt = $conn->prepare($sql);
+       $stmt->execute([$email, $password]);
+       return $stmt->fetch();
+   }
+   
+   // Signup với validation
+   function signup($hoten,$email,$matkhau){
+       $sql = "INSERT INTO taikhoan(`hoten`,`email`,`matkhau`) 
+               VALUES (?,?,?)";
+       $conn = pdo_get_connection();
+       $stmt = $conn->prepare($sql);
+       return $stmt->execute([$hoten, $email, $matkhau]);
+   }
+   
+   // Check email tồn tại
+   function checkMail($email){
+       $sql = "SELECT * FROM taikhoan WHERE email=?";
+       $conn = pdo_get_connection();
+       $stmt = $conn->prepare($sql);
+       $stmt->execute([$email]);
+       return $stmt->fetch();
+   }
+   ?>
+   ```
+
+5. 🛒 SHOPPING CART (model/cart.php)
+   
+   ```php
+   <?php
+   // Kiểm tra giỏ hàng tồn tại
+   function get_hasCart($makh){
+       return pdo_query_one("SELECT * FROM hoadon WHERE makh=? AND trangthai=?",
+                           $makh, 'gio-hang');
+   }
+   
+   // Thêm sản phẩm vào giỏ hàng
+   function get_addToCart($mahd, $masp, $soluong = 1){
+       // Kiểm tra sản phẩm đã có trong giỏ
+       $existing = pdo_query_one("SELECT * FROM chitiethoadon 
+                                 WHERE mahd=? AND masp=?", $mahd, $masp);
+       
+       if($existing) {
+           // Cập nhật số lượng
+           $newQuantity = $existing['soluong'] + 1;
+           pdo_execute("UPDATE chitiethoadon SET soluong=? 
+                       WHERE mahd=? AND masp=?", $newQuantity, $mahd, $masp);
+       } else {
+           // Thêm mới
+           pdo_execute("INSERT INTO chitiethoadon(`mahd`,`masp`,`soluong`) 
+                       VALUES(?,?,?)", $mahd, $masp, 1);
+       }
+   }
+   
+   // Hiển thị chi tiết giỏ hàng
+   function get_Cart($makh){
+       return pdo_query("SELECT hd.mahd, ct.soluong, sp.masp, sp.tensp, 
+                        sp.anh, sp.dongia, sp.khuyenmai 
+                        FROM hoadon hd 
+                        INNER JOIN chitiethoadon ct ON hd.mahd = ct.mahd 
+                        INNER JOIN sanpham sp ON ct.masp = sp.masp 
+                        WHERE hd.makh=? AND hd.trangthai=?
+                        GROUP BY ct.masp", $makh, 'gio-hang');
+   }
+   ?>
+   ```
+
+================================================================
+
+🎮 CONTROLLERS ANALYSIS
+========================
+
+1. 📄 PAGE CONTROLLER (controller/page.php)
+   
+   Chức năng: Xử lý các trang tĩnh và routing chính
+   
+   ```php
+   <?php
+   include_once 'model/connect.php';
+   
+   $act = isset($_GET['act']) ? $_GET['act'] : '';
+   
+   // Load templates cho user pages
+   $admin_pages = ['dashboard', 'admin_binhluan'];
+   if (!in_array($act, $admin_pages)) {
+       include_once 'view/template_head.php';
+       include_once 'view/template_header.php';
+   }
+   
+   switch ($act) {
+       case 'home':
+           include_once 'model/products.php';
+           include_once 'model/categories.php';
+           $data['dssp'] = get_products();
+           $dsNew = get_productNew(4);
+           $dsView = get_productView(4);
+           include_once 'view/page_home.php';
+           break;
+           
+       case 'giohang':
+           include_once 'model/cart.php';
+           include_once 'model/products.php';
+           
+           if (isset($_SESSION['user'])) {
+               $makh = $_SESSION['user']['makh'];
+               $giohang = get_hasCart($makh);
+               $ctgiohang = $giohang ? get_Cart($makh) : [];
+           }
+           include_once 'view/page_giohang.php';
+           break;
+           
+       case 'dashboard':
+           // Admin dashboard với kiểm tra quyền
+           if (!(isset($_SESSION['user']) && $_SESSION['user']['quyen']=='admin')) {
+               header('Location: index.php');
+           }
+           include_once 'view/page_dashboard.php';
+           break;
+   }
+   ?>
+   ```
+
+2. 🛍️ PRODUCT CONTROLLER (controller/product.php)
+   
+   Chức năng: Quản lý sản phẩm, danh mục, tìm kiếm
+   
+   ```php
+   <?php
+   $act = isset($_GET['act']) ? $_GET['act'] : '';
+   
+   switch ($act) {
+       case 'sanpham':
+           // Pagination cho trang sản phẩm
+           include_once 'model/products.php';
+           include_once 'model/categories.php';
+           
+           $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+           $limit = 8;
+           $offset = ($page - 1) * $limit;
+           
+           $data['dsdm'] = get_categories();
+           $all_products = get_products();
+           $total_products = count($all_products);
+           $dssanpham = array_slice($all_products, $offset, $limit);
+           
+           // Tính pagination
+           $total_pages = ceil($total_products / $limit);
+           $data['pagination'] = [
+               'current_page' => $page,
+               'total_pages' => $total_pages,
+               'total_products' => $total_products
+           ];
+           
+           include_once 'view/page_sanpham.php';
+           break;
+           
+       case 'addToCart':
+           // Thêm vào giỏ hàng với AJAX
+           if (isset($_SESSION['user'])) {
+               include_once 'model/cart.php';
+               $makh = $_SESSION['user']['makh'];
+               $masp = $_POST['masp'];
+               
+               // Kiểm tra/tạo giỏ hàng
+               $giohang = get_hasCart($makh);
+               if (!$giohang) {
+                   get_cartAdd($makh);
+                   $giohang = get_hasCart($makh);
+               }
+               
+               // Thêm sản phẩm
+               get_addToCart($giohang['mahd'], $masp, 1);
+               
+               echo json_encode(['status' => 'success']);
+           }
+           exit;
+           break;
+           
+       case 'admin':
+           // Quản lý sản phẩm cho admin
+           if (!(isset($_SESSION['user']) && $_SESSION['user']['quyen']=='admin')) {
+               header('Location: index.php');
+           }
+           
+           include_once 'model/products.php';
+           $page = isset($_GET['page']) ? $_GET['page'] : 1;
+           $data['dssp'] = get_products(0, ($page-1)*4, 4);
+           
+           include_once 'view/product_admin.php';
+           break;
+   }
+   ?>
+   ```
+
+3. 👤 USER CONTROLLER (controller/user.php)
+   
+   Chức năng: Authentication, profile management
+   
+   ```php
+   <?php
+   include_once 'model/connect.php';
+   $act = isset($_GET['act']) ? $_GET['act'] : '';
+   
+   switch ($act) {
+       case 'login':
+           include_once 'model/user.php';
+           
+           if(isset($_POST['submit-login'])){
+               $kq = login($_POST['email'], $_POST['matkhau']);
+               if($kq){
+                   $_SESSION['user'] = $kq;
+                   
+                   // Redirect dựa trên quyền
+                   if($kq['quyen']=='admin'){
+                       header("Location: admin.php");
+                   } else {
+                       header("Location: index.php"); 
+                   }
+               } else {
+                   $thongbao = "Tài khoản hoặc mật khẩu chưa đúng!";
+               }
+           }
+           
+           include_once 'view/page_login.php';
+           break;
+           
+       case 'signup':
+           include_once 'model/user.php';
+           
+           if(isset($_POST['submit-signup'])){
+               // Kiểm tra email tồn tại
+               $kq = checkMail($_POST['email']);
+               if ($kq) {
+                   $thongbao2 = "Email đã tồn tại!";
+               } else {
+                   $kq = signup($_POST['hoten'], $_POST['email'], $_POST['matkhau']);
+                   if($kq){
+                       header("Location: ?mod=user&act=login");    
+                   }
+               }
+           }
+           
+           include_once 'view/page_signup.php';
+           break;
+           
+       case 'logout':
+           session_destroy();
+           header("Location: index.php");
+           break;
+   }
+   ?>
+   ```
+
+================================================================
+
+🗄️ DATABASE SCHEMA
+===================
+
+Hệ thống sử dụng 7 bảng chính:
+
+1. 📊 BẢNG SẢN PHẨM (sanpham)
+   ```sql
+   CREATE TABLE sanpham (
+       masp INT PRIMARY KEY AUTO_INCREMENT,
+       tensp VARCHAR(255) NOT NULL,
+       dongia DECIMAL(10,3) NOT NULL,
+       khuyenmai DECIMAL(10,3) DEFAULT 0,
+       soluong INT DEFAULT 0,           -- ✨ Inventory tracking
+       mota TEXT,
+       anh VARCHAR(255),
+       madm INT,
+       soluotxem INT DEFAULT 0,
+       FOREIGN KEY (madm) REFERENCES danhmuc(madm)
+   );
+   ```
+
+2. 📑 BẢNG DANH MỤC (danhmuc)
+   ```sql
+   CREATE TABLE danhmuc (
+       madm INT PRIMARY KEY AUTO_INCREMENT,
+       tendm VARCHAR(255) NOT NULL,
+       soluongsp INT DEFAULT 0,
+       thutu INT DEFAULT 0
+   );
+   ```
+
+3. 👥 BẢNG TÀI KHOẢN (taikhoan)
+   ```sql
+   CREATE TABLE taikhoan (
+       makh INT PRIMARY KEY AUTO_INCREMENT,
+       hoten VARCHAR(255) NOT NULL,
+       email VARCHAR(255) UNIQUE NOT NULL,
+       matkhau VARCHAR(255) NOT NULL,
+       diachi TEXT,
+       sdt VARCHAR(20),
+       anh VARCHAR(255),
+       quyen ENUM('user', 'admin') DEFAULT 'user'
+   );
+   ```
+
+4. 🧾 BẢNG HÓA ĐƠN (hoadon)
+   ```sql
+   CREATE TABLE hoadon (
+       mahd INT PRIMARY KEY AUTO_INCREMENT,
+       makh INT NOT NULL,
+       ngaydathang DATETIME NOT NULL,
+       tongtien DECIMAL(10,3) DEFAULT 0,
+       ghichu TEXT,
+       trangthai ENUM('gio-hang', 'cho-xac-nhan', 'chuan-bi-don-hang', 
+                     'dang-giao-hang', 'da-giao', 'da-huy') DEFAULT 'gio-hang',
+       FOREIGN KEY (makh) REFERENCES taikhoan(makh)
+   );
+   ```
+
+5. 📋 BẢNG CHI TIẾT HÓA ĐƠN (chitiethoadon)
+   ```sql
+   CREATE TABLE chitiethoadon (
+       mahd INT NOT NULL,
+       masp INT NOT NULL,
+       soluong INT NOT NULL DEFAULT 1,
+       dongia DECIMAL(10,3) DEFAULT 0,
+       PRIMARY KEY (mahd, masp),
+       FOREIGN KEY (mahd) REFERENCES hoadon(mahd),
+       FOREIGN KEY (masp) REFERENCES sanpham(masp)
+   );
+   ```
+
+6. 💬 BẢNG BÌNH LUẬN (binhluan)
+   ```sql
+   CREATE TABLE binhluan (
+       mabl INT PRIMARY KEY AUTO_INCREMENT,
+       noidung TEXT NOT NULL,
+       makh INT NOT NULL,
+       masp INT NOT NULL,
+       ngaybl DATETIME DEFAULT CURRENT_TIMESTAMP,
+       FOREIGN KEY (makh) REFERENCES taikhoan(makh),
+       FOREIGN KEY (masp) REFERENCES sanpham(masp)
+   );
+   ```
+
+7. 📊 BẢNG LOG THAY ĐỔI KHO (stock_log) - ✨ NEW FEATURE
+   ```sql
+   CREATE TABLE stock_log (
+       id INT PRIMARY KEY AUTO_INCREMENT,
+       masp INT NOT NULL,
+       quantity_change INT NOT NULL,
+       reason VARCHAR(255),
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+       FOREIGN KEY (masp) REFERENCES sanpham(masp)
+   );
+   ```
+
+================================================================
+
+✨ TÍNH NĂNG NỔI BẬT
+====================
+
+1. 🛒 HỆ THỐNG GIỎ HÀNG NÂNG CAO
+   - Session-based cart cho user chưa đăng nhập
+   - Database cart cho user đã đăng nhập
+   - AJAX thêm/xóa sản phẩm không reload trang
+   - Cập nhật số lượng real-time
+   - Tính tổng tiền tự động
+
+2. 📦 QUẢN LÝ KHO TỰ ĐỘNG
+   - Tracking số lượng tồn kho
+   - Tự động trừ kho khi duyệt đơn hàng
+   - Cảnh báo sản phẩm sắp hết hàng
+   - Log lịch sử thay đổi số lượng
+   - Transaction safety đảm bảo data integrity
+
+3. 🔐 BẢO MẬT TOÀN DIỆN
+   - PDO Prepared Statements chống SQL Injection
+   - Session-based authentication
+   - Role-based access control (user/admin)
+   - Input validation và sanitization
+   - File upload security
+
+4. 📱 RESPONSIVE DESIGN
+   - Mobile-first approach
+   - CSS Grid & Flexbox layout
+   - Adaptive navigation
+   - Touch-friendly interface
+
+5. 🎨 ADMIN DASHBOARD HIỆN ĐẠI
+   - Real-time statistics
+   - Inventory alerts
+   - Order management
+   - User management
+   - Product analytics
+
+================================================================
+
+🚀 FLOW XỬ LÝ CHÍNH
+====================
+
+1. 🛍️ QUY TRÌNH MUA HÀNG:
+   ```
+   User Browser → Browse Products → Add to Cart → 
+   Login/Register → Checkout → Order Confirmation → 
+   Admin Review → Order Processing → Delivery → Complete
+   ```
+
+2. 📦 QUY TRÌNH QUẢN LÝ KHO:
+   ```
+   Admin Add Product → Set Initial Stock → 
+   Customer Order → Admin Approve → Auto Reduce Stock → 
+   Low Stock Alert → Restock → Update Inventory
+   ```
+
+3. 🔐 QUY TRÌNH AUTHENTICATION:
+   ```
+   User Access → Check Session → 
+   If Not Logged: Redirect to Login → 
+   Validate Credentials → Set Session → 
+   Role-based Redirect (Admin/User Dashboard)
+   ```
+
+================================================================
+
+💻 TECHNOLOGIES STACK
+======================
+
+🔧 Backend:
+- PHP 7.4+ (Server-side scripting)
+- MySQL 5.7+ (Database)
+- PDO (Database abstraction)
+- Session Management (User state)
+
+🎨 Frontend:
+- HTML5 (Structure)
+- CSS3 (Styling + Grid/Flexbox)
+- JavaScript (Interactivity)
+- AJAX (Asynchronous requests)
+
+🛠️ Development Tools:
+- VS Code (IDE)
+- XAMPP (Local server)
+- phpMyAdmin (Database management)
+- Git (Version control)
+
+🔒 Security:
+- Prepared Statements (SQL Injection prevention)
+- Input Validation (XSS prevention)
+- Session Security (Authentication)
+- File Upload Validation
+
+================================================================
+
+📊 THỐNG KÊ DỰ ÁN
+==================
+
+📄 Số lượng files:
+- Controllers: 4 files
+- Models: 7 files  
+- Views: 25+ files
+- CSS: 8 files
+- Images: 50+ files
+
+💾 Database:
+- 7 bảng chính
+- Quan hệ FOREIGN KEY đầy đủ
+- Indexes cho performance
+- Transaction support
+
+🔧 Functions:
+- 50+ PHP functions
+- CRUD operations hoàn chỉnh
+- Security functions
+- Helper utilities
+
+================================================================
+
+🎯 DEMO SCENARIOS
+=================
+
+1. 👤 USER JOURNEY:
+   ```
+   1. Truy cập trang chủ
+   2. Duyệt sản phẩm theo danh mục
+   3. Xem chi tiết sản phẩm
+   4. Thêm vào giỏ hàng
+   5. Đăng ký/đăng nhập
+   6. Thanh toán đơn hàng
+   7. Theo dõi trạng thái đơn hàng
+   ```
+
+2. 🎛️ ADMIN WORKFLOW:
+   ```
+   1. Đăng nhập admin
+   2. Xem dashboard thống kê
+   3. Quản lý sản phẩm (CRUD)
+   4. Quản lý danh mục
+   5. Xử lý đơn hàng
+   6. Quản lý user
+   7. Xem báo cáo kho
+   ```
+
+3. 📦 INVENTORY MANAGEMENT:
+   ```
+   1. Thêm sản phẩm với số lượng
+   2. Khách đặt hàng
+   3. Admin duyệt đơn → Tự động trừ kho
+   4. Cảnh báo khi sắp hết hàng
+   5. Nhập thêm hàng
+   6. Xem lịch sử thay đổi
+   ```
+
+================================================================
+
+🎪 LIVE DEMO CODE SNIPPETS
+===========================
+
+1. 🔍 SEARCH FUNCTIONALITY:
+   ```javascript
+   // Real-time search
+   function searchProducts() {
+       const keyword = document.getElementById('search').value;
+       
+       if(keyword.length > 2) {
+           fetch(`?mod=product&act=search&keyword=${keyword}`)
+           .then(response => response.json())
+           .then(data => {
+               displaySearchResults(data);
+           });
+       }
+   }
+   ```
+
+2. 🛒 AJAX ADD TO CART:
+   ```javascript
+   function addToCart(masp) {
+       fetch('?mod=product&act=addToCart', {
+           method: 'POST',
+           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+           body: `masp=${masp}`
+       })
+       .then(response => response.json())
+       .then(data => {
+           if(data.status === 'success') {
+               updateCartCounter();
+               showSuccessMessage('Đã thêm vào giỏ hàng!');
+           }
+       });
+   }
+   ```
+
+3. 📊 DYNAMIC DASHBOARD:
+   ```php
+   // Real-time statistics
+   $today_orders = count(pdo_query(
+       "SELECT * FROM hoadon WHERE DATE(ngaydathang) = CURDATE()"
+   ));
+   
+   $low_stock_products = pdo_query(
+       "SELECT * FROM sanpham WHERE soluong <= 10"
+   );
+   
+   $monthly_revenue = pdo_query_one(
+       "SELECT SUM(tongtien) as total FROM hoadon 
+        WHERE MONTH(ngaydathang) = MONTH(CURRENT_DATE())
+        AND trangthai = 'da-giao'"
+   );
+   ```
+
+================================================================
+
+🏆 KẾT LUẬN VÀ ĐÁNH GIA
+========================
+
+✅ ĐIỂM MẠNH:
+- Kiến trúc MVC rõ ràng, dễ maintain
+- Security tốt với PDO và prepared statements  
+- Inventory management tự động và chính xác
+- Responsive design thân thiện mobile
+- Admin dashboard đầy đủ tính năng
+- Code clean, có documentation
+
+🔄 CẢI TIẾN TRONG TƯƠNG LAI:
+- Tích hợp payment gateway
+- Hệ thống notification real-time
+- API RESTful cho mobile app
+- Advanced analytics và reporting
+- Multi-language support
+- Advanced search với filters
+
+💡 BÀI HỌC:
+- Importance của planning và architecture
+- Security best practices
+- User experience design
+- Database optimization
+- Testing và debugging procedures
+
+================================================================
+
+📞 THÔNG TIN LIÊN HỆ
+====================
+
+👨‍💻 Developer: tutaki304
+🎯 Project: ShopTuPHP E-commerce System
+📅 Completion Date: August 2025
+🔧 Tech Stack: PHP, MySQL, HTML5, CSS3, JavaScript
+📋 Purpose: Academic Project & Portfolio
+
+================================================================
+                            KẾT THÚC BÁO CÁO
+================================================================
