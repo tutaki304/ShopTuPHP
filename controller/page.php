@@ -3,15 +3,18 @@
 //gọi dc: view, model
     include_once 'model/connect.php';
     
+    // Kiểm tra action từ GET hoặc POST
+    $act = isset($_GET['act']) ? $_GET['act'] : (isset($_POST['act']) ? $_POST['act'] : '');
+    
     // Chỉ load template cho trang user, không load cho admin pages
     $admin_pages = ['dashboard', 'admin_binhluan', 'quan_ly_binh_luan', 'delete_binhluan'];
-    if (!isset($_GET['act']) || !in_array($_GET['act'], $admin_pages)) {
+    if (empty($act) || !in_array($act, $admin_pages)) {
         include_once 'view/template_head.php';
         include_once 'view/template_header.php';
     }
 
-    if ( $_GET['act'] ) {
-        switch ($_GET['act']) {
+    if (!empty($act)) {
+        switch ($act) {
             case 'home':
                 include_once 'model/products.php';
                 include_once 'model/categories.php';

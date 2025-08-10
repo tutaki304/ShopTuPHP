@@ -591,7 +591,9 @@ form .form-content .sign-up-text{
 }
 
 .danhmuc-right-content-item{
-    width: calc(25% - 12px); /* Giữ nguyên để đảm bảo 4 cột */
+    width: calc(25% - 12px); /* 4 cột trên desktop */
+    min-width: 200px; /* Đảm bảo kích thước tối thiểu */
+    max-width: 300px; /* Giới hạn kích thước tối đa khi ít sản phẩm */
     padding: 12px 0;
     border: 1px solid #e9ecef;
     border-radius: 8px;
@@ -599,6 +601,22 @@ form .form-content .sign-up-text{
     background: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     flex-shrink: 0; /* Ngăn các item bị co lại */
+}
+
+/* Classes để xử lý số lượng sản phẩm khác nhau */
+.danhmuc-right-content.single-item .danhmuc-right-content-item {
+    width: 300px; /* Kích thước cố định khi chỉ có 1 sản phẩm */
+    max-width: 300px;
+}
+
+.danhmuc-right-content.two-items .danhmuc-right-content-item {
+    width: calc(50% - 8px); /* 2 cột khi có 2 sản phẩm */
+    max-width: 350px;
+}
+
+.danhmuc-right-content.three-items .danhmuc-right-content-item {
+    width: calc(33.333% - 10px); /* 3 cột khi có 3 sản phẩm */
+    max-width: 300px;
 }
 
 .danhmuc-right-content-item:hover {
@@ -1008,6 +1026,18 @@ footer .fa {
         flex-shrink: 0; /* Ngăn co lại trên tablet */
     }
     
+    /* Override classes cho tablet */
+    .danhmuc-right-content.single-item .danhmuc-right-content-item,
+    .danhmuc-right-content.two-items .danhmuc-right-content-item {
+        width: calc(50% - 8px);
+        max-width: none;
+    }
+    
+    .danhmuc-right-content.three-items .danhmuc-right-content-item {
+        width: calc(50% - 8px);
+        max-width: none;
+    }
+    
     .danhmuc-right-top-item {
         flex: 1;
         padding: 0 6px;
@@ -1038,6 +1068,14 @@ footer .fa {
         width: 100%;
         margin-bottom: 15px;
         flex-shrink: 0; /* Ngăn co lại trên mobile */
+    }
+    
+    /* Override tất cả classes cho mobile - hiển thị 1 cột */
+    .danhmuc-right-content.single-item .danhmuc-right-content-item,
+    .danhmuc-right-content.two-items .danhmuc-right-content-item,
+    .danhmuc-right-content.three-items .danhmuc-right-content-item {
+        width: 100%;
+        max-width: none;
     }
     
     .danhmuc-right-content-item img {

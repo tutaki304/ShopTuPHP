@@ -1,8 +1,11 @@
 <?php
 include_once 'model/connect.php';
 
-if ($_GET['act']) {
-    switch ($_GET['act']) {
+// Kiểm tra action từ GET hoặc POST
+$act = isset($_GET['act']) ? $_GET['act'] : (isset($_POST['act']) ? $_POST['act'] : '');
+
+if (!empty($act)) {
+    switch ($act) {
         //thêm vào giỏ hàng - xử lý TRƯỚC template
         case 'addToCart':
             // Debug logging
@@ -455,8 +458,15 @@ if ($_GET['act']) {
             include_once 'model/products.php';
             include_once 'model/categories.php';
             
+            // Hỗ trợ cả POST và GET parameters
+            $keyword = '';
             if(isset($_POST['keyword']) && !empty($_POST['keyword'])) {
                 $keyword = $_POST['keyword'];
+            } elseif(isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+                $keyword = $_GET['keyword'];
+            }
+            
+            if(!empty($keyword)) {
                 $search_results = product_search($keyword);
                 $data['dssp'] = $search_results;
                 $data['keyword'] = $keyword;
@@ -484,5 +494,4 @@ if ($_GET['act']) {
     include_once 'view/template_header.php';
     include_once 'view/template_footer.php';
 }
-?>
 ?>

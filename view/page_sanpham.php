@@ -39,7 +39,21 @@
                             <option value="">giá thấp - cao</option>
                         </select>
                     </div>
-                    <div class="danhmuc-right-content row">  
+                    
+                    <?php 
+                    // Xác định class CSS dựa trên số lượng sản phẩm
+                    $productCount = isset($data['dssp']) ? count($data['dssp']) : 0;
+                    $cssClass = '';
+                    if ($productCount == 1) {
+                        $cssClass = 'single-item';
+                    } elseif ($productCount == 2) {
+                        $cssClass = 'two-items';
+                    } elseif ($productCount == 3) {
+                        $cssClass = 'three-items';
+                    }
+                    ?>
+                    
+                    <div class="danhmuc-right-content row <?= $cssClass ?>">  
                         <?php 
                             // Hiển thị sản phẩm từ pagination
                             foreach($data['dssp'] as $sp):

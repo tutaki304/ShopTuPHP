@@ -439,8 +439,6 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                                     <!-- Text hiển thị: Database đang kết nối bình thường -->
                                 </span>
                             </div>
-                            
-                            3. THEO DÕI SỬ DỤNG BỘ NHỚ
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-600">Bộ nhớ</span>
                                 <!-- Nhãn hiển thị: Memory/RAM usage -->
@@ -472,7 +470,7 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                     <div class="card-body">
                         <h4 class="text-lg font-semibold text-gray-900 mb-4">Thao tác nhanh</h4>
                         <div class="space-y-3">
-                            <a href="admin.php?mod=product&act=add" class="w-full btn btn-primary justify-start">
+                            <a href="admin.php?mod=product&act=add" class="w-full btn btn-secondary justify-start">
                                 <i class="fas fa-plus w-4 h-4 mr-3"></i>
                                 Thêm sản phẩm
                             </a>
@@ -487,6 +485,10 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                             <a href="index.php" class="w-full btn btn-secondary justify-start">
                                 <i class="fas fa-home w-4 h-4 mr-3"></i>
                                 Trở về trang chủ
+                            </a>
+                            <a href="admin.php?mod=product&act=admin" class="w-full btn btn-primary justify-start">
+                                <i class="fas fa-cogs w-4 h-4 mr-3"></i>
+                                Quản lý ngay
                             </a>
                         </div>
                     </div>
@@ -560,7 +562,7 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                                         <?= date('d/m/Y', strtotime($order['ngaydathang'])) ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        <?= number_format($order['calculated_total'] * 1000) ?>đ
+                                        <?= number_format($order['calculated_total']) ?>đ
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <?php
@@ -626,11 +628,6 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                             <h3 class="text-lg font-medium text-blue-900">Mẹo quản lý</h3>
                             <p class="text-blue-700">Cập nhật thông tin sản phẩm thường xuyên để thu hút khách hàng. Theo dõi thống kê để đưa ra quyết định kinh doanh hiệu quả.</p>
                         </div>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <a href="admin.php?mod=product&act=admin" class="btn btn-primary">
-                            Quản lý ngay
-                        </a>
                     </div>
                 </div>
             </div>

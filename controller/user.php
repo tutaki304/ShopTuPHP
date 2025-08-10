@@ -1,8 +1,12 @@
 <?php
 // quản lý view và model liên quan đến user
     include_once 'model/connect.php';
-    if ( $_GET['act'] ) {
-        switch ($_GET['act']) {
+    
+    // Kiểm tra action từ GET hoặc POST
+    $act = isset($_GET['act']) ? $_GET['act'] : (isset($_POST['act']) ? $_POST['act'] : '');
+    
+    if (!empty($act)) {
+        switch ($act) {
             //quản lý đăng nhập 
             case 'login':
                 include_once 'model/connect.php';;

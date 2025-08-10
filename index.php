@@ -1,8 +1,11 @@
 <?php
     session_start();
 //điều hướng các controller
-    if (isset($_GET['mod'])) {
-        switch ($_GET['mod']) {
+    // Kiểm tra mod từ GET hoặc POST
+    $mod = isset($_GET['mod']) ? $_GET['mod'] : (isset($_POST['mod']) ? $_POST['mod'] : '');
+    
+    if (!empty($mod)) {
+        switch ($mod) {
             case 'page':
                 include_once 'controller/page.php';
                     break;

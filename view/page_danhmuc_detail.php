@@ -61,10 +61,10 @@
         <div class="container-danhmuc">
             <div class="row">
                 <div class="danhmuc-left">
-                    <form action="" id="search" method="get">
+                    <form action="index.php" id="search" method="POST">
                         <input type="hidden" name="mod" value="product">
                         <input type="hidden" name="act" value="search">
-                        <input type="text" name="keyword" placeholder="Nhập tên sãn phẩm cần tìm">
+                        <input type="text" name="keyword" placeholder="Nhập tên sản phẩm cần tìm">
                         <input type="submit" name="submit" value="Tìm">
                     </form>
                     <ul>
@@ -92,7 +92,21 @@
                             <option value="">giá thấp - cao</option>
                         </select>
                     </div>
-                    <div class="danhmuc-right-content row">  
+                    
+                    <?php 
+                    // Xác định class CSS dựa trên số lượng sản phẩm
+                    $productCount = isset($dssanpham) ? count($dssanpham) : 0;
+                    $cssClass = '';
+                    if ($productCount == 1) {
+                        $cssClass = 'single-item';
+                    } elseif ($productCount == 2) {
+                        $cssClass = 'two-items';
+                    } elseif ($productCount == 3) {
+                        $cssClass = 'three-items';
+                    }
+                    ?>
+                    
+                    <div class="danhmuc-right-content row <?= $cssClass ?>">  
                         <?php 
                             // Hiển thị sản phẩm theo danh mục
                             if (!empty($dssanpham)):

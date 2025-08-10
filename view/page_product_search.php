@@ -38,23 +38,31 @@
                         <?php endif; ?>
                     </div>
                     
-                    <div class="danhmuc-right-content row">
+                    <?php 
+                    // Xác định class CSS dựa trên số lượng sản phẩm
+                    $productCount = isset($data['dssp']) ? count($data['dssp']) : 0;
+                    $cssClass = '';
+                    if ($productCount == 1) {
+                        $cssClass = 'single-item';
+                    } elseif ($productCount == 2) {
+                        $cssClass = 'two-items';
+                    } elseif ($productCount == 3) {
+                        $cssClass = 'three-items';
+                    }
+                    ?>
+                    
+                    <div class="danhmuc-right-content row <?= $cssClass ?>">
                         <?php if(isset($data['dssp']) && !empty($data['dssp'])): ?>
                             <?php foreach($data['dssp'] as $sp): ?>
                                 <div class="danhmuc-right-content-item">
                                     <a href="?mod=product&act=ctsanpham&id=<?= $sp['masp'] ?>">
                                         <img src="upload/product/<?= $sp['anh'] ?>" alt="<?= htmlspecialchars($sp['tensp']) ?>">
+                                        <h3><?= htmlspecialchars($sp['tensp']) ?></h3>
                                     </a>
-                                    <h1><a href="?mod=product&act=ctsanpham&id=<?= $sp['masp'] ?>"><?= htmlspecialchars($sp['tensp']) ?></a></h1>
-                                    <p class="price">
-                                        <?php if($sp['khuyenmai'] > 0): ?>
-                                            <span class="old-price"><?= number_format($sp['dongia'] * 1000) ?>đ</span>
-                                            <span class="new-price"><?= number_format($sp['khuyenmai'] * 1000) ?>đ</span>
-                                        <?php else: ?>
-                                            <span class="new-price"><?= number_format($sp['dongia'] * 1000) ?>đ</span>
-                                        <?php endif; ?>
+                                    <p>
+                                        <span>Mã: <?= $sp['masp'] ?></span>
+                                        <span class="price"><?= number_format(($sp['khuyenmai'] ?? $sp['dongia']) * 1000) ?>đ</span>
                                     </p>
-                                    <p class="category">Danh mục: <?= htmlspecialchars($sp['tendm']) ?></p>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -77,33 +85,3 @@
         </div>
     </section>
 </main>
-
-<style>
-    .no-results {
-        width: 100%;
-        grid-column: 1 / -1;
-    }
-    
-    .price .old-price {
-        text-decoration: line-through;
-        color: #999;
-        margin-right: 10px;
-    }
-    
-    .price .new-price {
-        color: #e74c3c;
-        font-weight: bold;
-    }
-    
-    .category {
-        color: #666;
-        font-size: 0.9em;
-        margin-top: 5px;
-    }
-    
-    .danhmuc-right-top-item p {
-        color: #333;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-</style>
