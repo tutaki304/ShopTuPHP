@@ -28,6 +28,9 @@ $total_accounts = count($accounts);
 $order_statistics = get_order_statistics();
 $total_orders = 0;
 $pending_orders = 0;
+
+// Cảnh báo sản phẩm sắp hết hàng
+$low_stock_products = get_low_stock_products(5); // Ngưỡng cảnh báo: 5 sản phẩm
 $completed_orders = 0;
 
 foreach($order_statistics as $stat) {
@@ -522,6 +525,50 @@ $recent_orders = array_slice($recent_orders, 0, 5); // Chỉ lấy 5 đơn gần
                         </div>
                     </div>
                 </div>
+                
+                <!-- Low Stock Alert -->
+                <?php if (!empty($low_stock_products)): ?>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold text-red-600">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>
+                                Sản phẩm sắp hết hàng
+                            </h4>
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">
+                                <?= count($low_stock_products) ?> sản phẩm
+                            </span>
+                        </div>
+                        <div class="space-y-3 max-h-64 overflow-y-auto">
+                            <?php foreach(array_slice($low_stock_products, 0, 5) as $product): ?>
+                            <div class="flex items-center space-x-3 p-2 bg-red-50 rounded-lg">
+                                <img src="upload/product/<?= $product['anh'] ?>" alt="" class="w-10 h-10 rounded-lg object-cover">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        <?= $product['tensp'] ?>
+                                    </p>
+                                    <p class="text-xs text-red-600">
+                                        Còn lại: <?= $product['soluong'] ?> sản phẩm
+                                    </p>
+                                </div>
+                                <a href="admin.php?mod=product&act=edit&id=<?= $product['masp'] ?>" 
+                                   class="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-red-100 text-red-700 hover:bg-red-200">
+                                    <i class="fas fa-edit mr-1"></i>
+                                    Cập nhật
+                                </a>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php if (count($low_stock_products) > 5): ?>
+                        <div class="mt-3 text-center">
+                            <a href="admin.php?mod=order&act=stock_alert" class="text-red-600 hover:text-red-700 text-sm font-medium">
+                                Xem tất cả <?= count($low_stock_products) ?> sản phẩm <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
         

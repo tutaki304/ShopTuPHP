@@ -49,8 +49,34 @@ if (isset($_GET['act'])) {
                 $mahd = $_POST['mahd'];
                 $trangthai = $_POST['trangthai'];
                 
+                // Kiểm tra số lượng tồn kho trước khi duyệt đơn hàng
+                if (in_array($trangthai, ['chuan-bi-don-hang', 'dang-giao-hang'])) {
+                    $stock_validation = validate_order_stock($mahd);
+                    
+                    if (!$stock_validation['valid']) {
+                        $error_message = "Không thể duyệt đơn hàng do không đủ số lượng sản phẩm:<br>";
+                        foreach ($stock_validation['insufficient_products'] as $product) {
+                            $error_message .= "- {$product['tensp']}: Cần {$product['order_quantity']}, chỉ còn {$product['stock_quantity']}<br>";
+                        }
+                        $_SESSION['error'] = $error_message;
+                        
+                        if (isset($_POST['redirect'])) {
+                            header('Location: admin.php?mod=order&act=detail&id=' . $mahd);
+                        } else {
+                            header('Location: admin.php?mod=order&act=list');
+                        }
+                        exit;
+                    }
+                }
+                
+                // Thực hiện cập nhật trạng thái
                 if (update_order_status($mahd, $trangthai)) {
                     $_SESSION['success'] = "Cập nhật trạng thái đơn hàng thành công!";
+                    
+                    // Thông báo thêm nếu trừ số lượng sản phẩm
+                    if (in_array($trangthai, ['chuan-bi-don-hang', 'dang-giao-hang', 'da-giao'])) {
+                        $_SESSION['success'] .= " Số lượng sản phẩm đã được cập nhật.";
+                    }
                 } else {
                     $_SESSION['error'] = "Có lỗi xảy ra khi cập nhật trạng thái!";
                 }
@@ -156,6 +182,35 @@ if (isset($_GET['act'])) {
             $end_date = date('Y-m-d');
             $start_date = date('Y-m-d', strtotime('-7 days'));
             $revenue_data = get_revenue_by_period($start_date, $end_date);
+            
+            include_once 'view/template_admin_head.php';
+            include_once 'view/template_admin_header.php';
+            include_once 'view/order_statistics.php';
+            include_once 'view/template_admin_footer.php';
+            break;
+            
+        case 'stock_alert':
+            // Cảnh báo sản phẩm sắp hết hàng
+            $threshold = isset($_GET['threshold']) ? (int)$_GET['threshold'] : 10;
+            $low_stock_products = get_low_stock_products($threshold);
+            
+            include_once 'view/template_admin_head.php';
+            include_once 'view/template_admin_header.php';
+            include_once 'view/stock_alert.php';
+            include_once 'view/template_admin_footer.php';
+            break;
+            
+        case 'stock_history':
+            // Lịch sử thay đổi số lượng sản phẩm
+            $masp = isset($_GET['masp']) ? (int)$_GET['masp'] : null;
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 50;
+            $stock_history = get_stock_history($masp, $limit);
+            
+            include_once 'view/template_admin_head.php';
+            include_once 'view/template_admin_header.php';
+            include_once 'view/stock_history.php';
+            include_once 'view/template_admin_footer.php';
+            break;
             
             include_once 'view/template_admin_head.php';
             include_once 'view/template_admin_header.php';
