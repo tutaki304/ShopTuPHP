@@ -141,4 +141,98 @@
         return $result['total'];
     }
 
+    // Cập nhật số lượng sản phẩm
+    function update_product_quantity($masp, $quantity_change, $reason = '') {
+        try {
+            $conn = pdo_get_connection();
+            $conn->beginTransaction();
+            
+            // Lấy số lượng hiện tại
+            $current = pdo_query_one("SELECT soluong FROM sanpham WHERE masp = ?", $masp);
+            if (!$current) {
+                throw new Exception("Không tìm thấy sản phẩm với mã: " . $masp);
+            }
+            
+            $new_quantity = $current['soluong'] + $quantity_change;
+            
+            // Kiểm tra số lượng không được âm
+            if ($new_quantity < 0) {
+                throw new Exception("Số lượng sản phẩm không đủ. Hiện có: " . $current['soluong'] . ", cần: " . abs($quantity_change));
+            }
+            
+            // Cập nhật số lượng
+            $sql = "UPDATE sanpham SET soluong = ? WHERE masp = ?";
+            pdo_execute($sql, $new_quantity, $masp);
+            
+            // Ghi log thay đổi
+            $log_sql = "INSERT INTO stock_log (masp, quantity_change, reason) VALUES (?, ?, ?)";
+            pdo_execute($log_sql, $masp, $quantity_change, $reason);
+            
+            $conn->commit();
+            return true;
+            
+        } catch (Exception $e) {
+            if (isset($conn)) {
+                $conn->rollback();
+            }
+            throw $e;
+        }
+    }
+
+    // Kiểm tra số lượng tồn kho
+    function check_stock_availability($masp, $required_quantity) {
+        $product = pdo_query_one("SELECT soluong FROM sanpham WHERE masp = ?", $masp);
+        if (!$product) {
+            return false;
+        }
+        return $product['soluong'] >= $required_quantity;
+    }
+
+    // Lấy sản phẩm sắp hết hàng
+    function get_low_stock_products($threshold = 10) {
+        $sql = "SELECT s.*, d.tendm FROM sanpham s 
+                INNER JOIN danhmuc d ON s.madm = d.madm 
+                WHERE s.soluong <= ? 
+                ORDER BY s.soluong ASC";
+        return pdo_query($sql, $threshold);
+    }
+
+    // Lấy lịch sử thay đổi số lượng
+    function get_stock_history($masp = null, $limit = 50) {
+        $sql = "SELECT sl.*, s.tensp FROM stock_log sl 
+                INNER JOIN sanpham s ON sl.masp = s.masp";
+        $params = [];
+        
+        if ($masp) {
+            $sql .= " WHERE sl.masp = ?";
+            $params[] = $masp;
+        }
+        
+        $sql .= " ORDER BY sl.created_at DESC LIMIT ?";
+        $params[] = $limit;
+        
+        return pdo_query($sql, ...$params);
+    }
+
+    // Cập nhật số lượng hàng loạt (dùng cho nhập kho)
+    function bulk_update_stock($products_data) {
+        try {
+            $conn = pdo_get_connection();
+            $conn->beginTransaction();
+            
+            foreach ($products_data as $data) {
+                update_product_quantity($data['masp'], $data['quantity_change'], $data['reason']);
+            }
+            
+            $conn->commit();
+            return true;
+            
+        } catch (Exception $e) {
+            if (isset($conn)) {
+                $conn->rollback();
+            }
+            throw $e;
+        }
+    }
+
 ?>
